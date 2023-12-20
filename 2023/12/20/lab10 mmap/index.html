@@ -1,105 +1,284 @@
+
+
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
   
-  <title>Hello World | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="@[toc] task mmap的定义如下 12void *mmap(void *addr, size_t length, int prot, int flags,           int fd, off_t offset);   在这个lab中，addr永远为0，即内核决定用哪个虚拟地址去映射这个文件，mmap返回这个虚拟地址，或者0xffffffffffffffff 表示失败  leng">
+    <meta name="description" content="@[toc] task mmap的定义如下 12void *mmap(void *addr, size_t length, int prot, int flags,           int fd, off_t offset);   在这个lab中，addr永远为0，即内核决定用哪个虚拟地址去映射这个文件，mmap返回这个虚拟地址，或者0xffffffffffffffff 表示失败  leng">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hello World">
 <meta property="og:url" content="http://example.com/2023/12/20/lab10%20mmap/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="@[toc] task mmap的定义如下 12void *mmap(void *addr, size_t length, int prot, int flags,           int fd, off_t offset);   在这个lab中，addr永远为0，即内核决定用哪个虚拟地址去映射这个文件，mmap返回这个虚拟地址，或者0xffffffffffffffff 表示失败  leng">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/2f6681728fc0423338ba88d2bce82c6b.png">
 <meta property="article:published_time" content="2023-12-20T07:46:23.581Z">
 <meta property="article:modified_time" content="2023-12-20T07:48:00.978Z">
 <meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/img_convert/2f6681728fc0423338ba88d2bce82c6b.png">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
   
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+  <title>Hello World - Hexo</title>
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
   
 <meta name="generator" content="Hexo 7.0.0"></head>
 
+
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Hello World"></span>
+          
+        </div>
+
         
-          <a class="main-nav-link" href="/">Home</a>
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-12-20 15:46" pubdate>
+          2023年12月20日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
         
-          <a class="main-nav-link" href="/archives">Archives</a>
+          2.4k 字
         
-      </nav>
-      <nav id="sub-nav">
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
         
         
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
         
-        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
+
+      
     </div>
   </div>
-</header>
+</div>
 
-      <div class="outer">
-        <section id="main"><article id="post-lab10 mmap" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/12/20/lab10%20mmap/" class="article-date">
-  <time class="dt-published" datetime="2023-12-20T07:46:23.581Z" itemprop="datePublished">2023-12-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      Hello World
-    </h1>
-  
+</div>
 
-      </header>
+  </header>
+
+  <main>
     
-    <div class="e-content article-entry" itemprop="articleBody">
       
-        <p><img src="https://img-blog.csdnimg.cn/img_convert/2f6681728fc0423338ba88d2bce82c6b.png" alt="image-20230829232154575"></p>
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Hello World</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="https://img-blog.csdnimg.cn/img_convert/2f6681728fc0423338ba88d2bce82c6b.png" srcset="/img/loading.gif" lazyload alt="image-20230829232154575"></p>
 <p>@[toc]</p>
 <h1 id="task"><a href="#task" class="headerlink" title="task"></a>task</h1><hr>
 <p>mmap的定义如下</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">mmap</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> length, <span class="type">int</span> prot, <span class="type">int</span> flags,</span></span><br><span class="line"><span class="params">           <span class="type">int</span> fd, <span class="type">off_t</span> offset)</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> *<span class="hljs-title function_">mmap</span><span class="hljs-params">(<span class="hljs-type">void</span> *addr, <span class="hljs-type">size_t</span> length, <span class="hljs-type">int</span> prot, <span class="hljs-type">int</span> flags,</span><br><span class="hljs-params">           <span class="hljs-type">int</span> fd, <span class="hljs-type">off_t</span> offset)</span>;<br></code></pre></td></tr></table></figure>
 
 <ol>
 <li><p>在这个lab中，addr永远为0，即内核决定用哪个虚拟地址去映射这个文件，mmap返回这个虚拟地址，或者0xffffffffffffffff 表示失败</p>
@@ -117,7 +296,7 @@
 </ol>
 <hr>
 <p>munmap的定义如下</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">munmap(addr, length)</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">munmap(addr, length)<br></code></pre></td></tr></table></figure>
 
 <ol>
 <li>munmap应该移出这些地址范围内的映射</li>
@@ -170,7 +349,7 @@
 </ol>
 <h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><h2 id="基础设置"><a href="#基础设置" class="headerlink" title="基础设置"></a>基础设置</h2><p>首先需要修改Makefile并且添加两个系统调用，这个就比较简单了</p>
 <h2 id="增加数据结构"><a href="#增加数据结构" class="headerlink" title="增加数据结构"></a>增加数据结构</h2><p>我们应该按照hints提示的，创造一个VMA的结构体，并且在进程的proc的结构体中存储一个VMA的数组。这里的思路就比较简单暴力了，就只维护一个数组，需要用的时候就遍历数组去找就行了。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">vma</span> &#123;</span></span><br><span class="line">    uint64 addr;</span><br><span class="line">    <span class="type">int</span> length;</span><br><span class="line">    <span class="type">int</span> prot;</span><br><span class="line">    <span class="type">int</span> flag;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">file</span>;</span></span><br><span class="line">    <span class="type">int</span> valid;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">proc</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vma</span> <span class="title">vmas</span>[16];</span></span><br><span class="line">    <span class="comment">//.......</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vma</span> &#123;</span><br>    uint64 addr;<br>    <span class="hljs-type">int</span> length;<br>    <span class="hljs-type">int</span> prot;<br>    <span class="hljs-type">int</span> flag;<br>    <span class="hljs-type">int</span> fd;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">file</span> *<span class="hljs-title">file</span>;</span><br>    <span class="hljs-type">int</span> valid;<br>&#125;;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> &#123;</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vma</span> <span class="hljs-title">vmas</span>[16];</span><br>    <span class="hljs-comment">//.......</span><br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="sys-mmap"><a href="#sys-mmap" class="headerlink" title="sys_mmap"></a>sys_mmap</h2><p>开始写<code>mmap</code>函数</p>
 <ol>
@@ -187,7 +366,7 @@
 </ol>
 </li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">uint64</span><br><span class="line"><span class="title function_">sys_mmap</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    uint64 addr;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">file</span>;</span></span><br><span class="line">    <span class="type">int</span> length, prot, flags, offest;</span><br><span class="line">    uint64 erro = <span class="number">0xffffffffffffffff</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 取出参数</span></span><br><span class="line">    <span class="keyword">if</span> (argaddr(<span class="number">0</span>, &amp;addr) &lt; <span class="number">0</span> || argint(<span class="number">1</span>, &amp;length) &lt; <span class="number">0</span></span><br><span class="line">        || argint(<span class="number">2</span>, &amp;prot) &lt; <span class="number">0</span> || argint(<span class="number">3</span>, &amp;flags) &lt; <span class="number">0</span></span><br><span class="line">        || argfd(<span class="number">4</span>, <span class="number">0</span>, &amp;file) &lt; <span class="number">0</span> || argint(<span class="number">5</span>, &amp;offest) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> erro;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 权限不对</span></span><br><span class="line">    <span class="keyword">if</span> (file-&gt;writable == <span class="number">0</span> &amp;&amp; flags == MAP_SHARED &amp;&amp; (prot &amp; PROT_WRITE)) &#123;</span><br><span class="line">        <span class="keyword">return</span> erro;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 地址不够了</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span> =</span> myproc();</span><br><span class="line">    <span class="keyword">if</span> (p-&gt;sz + length &gt; MAXVA) &#123;</span><br><span class="line">        <span class="keyword">return</span> erro;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 分配地址，找出一个空闲的vma</span></span><br><span class="line">    addr = p-&gt;sz;</span><br><span class="line">    p-&gt;sz += length;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (p-&gt;vmas[i].valid == <span class="number">0</span>) &#123;</span><br><span class="line">            p-&gt;vmas[i].valid = <span class="number">1</span>;</span><br><span class="line">            p-&gt;vmas[i].addr = addr;</span><br><span class="line">            p-&gt;vmas[i].flag = flags;</span><br><span class="line">            p-&gt;vmas[i].length = length;</span><br><span class="line">            p-&gt;vmas[i].prot = prot;</span><br><span class="line">            p-&gt;vmas[i].file = file;</span><br><span class="line">            filedup(file);</span><br><span class="line">            <span class="keyword">return</span> addr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> erro;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs c">uint64<br><span class="hljs-title function_">sys_mmap</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    uint64 addr;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">file</span> *<span class="hljs-title">file</span>;</span><br>    <span class="hljs-type">int</span> length, prot, flags, offest;<br>    uint64 erro = <span class="hljs-number">0xffffffffffffffff</span>;<br><br>    <span class="hljs-comment">// 取出参数</span><br>    <span class="hljs-keyword">if</span> (argaddr(<span class="hljs-number">0</span>, &amp;addr) &lt; <span class="hljs-number">0</span> || argint(<span class="hljs-number">1</span>, &amp;length) &lt; <span class="hljs-number">0</span><br>        || argint(<span class="hljs-number">2</span>, &amp;prot) &lt; <span class="hljs-number">0</span> || argint(<span class="hljs-number">3</span>, &amp;flags) &lt; <span class="hljs-number">0</span><br>        || argfd(<span class="hljs-number">4</span>, <span class="hljs-number">0</span>, &amp;file) &lt; <span class="hljs-number">0</span> || argint(<span class="hljs-number">5</span>, &amp;offest) &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> erro;<br>    &#125;<br>    <span class="hljs-comment">// 权限不对</span><br>    <span class="hljs-keyword">if</span> (file-&gt;writable == <span class="hljs-number">0</span> &amp;&amp; flags == MAP_SHARED &amp;&amp; (prot &amp; PROT_WRITE)) &#123;<br>        <span class="hljs-keyword">return</span> erro;<br>    &#125;<br>    <span class="hljs-comment">// 地址不够了</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> myproc();<br>    <span class="hljs-keyword">if</span> (p-&gt;sz + length &gt; MAXVA) &#123;<br>        <span class="hljs-keyword">return</span> erro;<br>    &#125;<br>    <span class="hljs-comment">// 分配地址，找出一个空闲的vma</span><br>    addr = p-&gt;sz;<br>    p-&gt;sz += length;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; i++) &#123;<br>        <span class="hljs-keyword">if</span> (p-&gt;vmas[i].valid == <span class="hljs-number">0</span>) &#123;<br>            p-&gt;vmas[i].valid = <span class="hljs-number">1</span>;<br>            p-&gt;vmas[i].addr = addr;<br>            p-&gt;vmas[i].flag = flags;<br>            p-&gt;vmas[i].length = length;<br>            p-&gt;vmas[i].prot = prot;<br>            p-&gt;vmas[i].file = file;<br>            filedup(file);<br>            <span class="hljs-keyword">return</span> addr;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> erro;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="usertrap"><a href="#usertrap" class="headerlink" title="usertrap"></a>usertrap</h2><p>修改<code>usertrap</code>函数，使得vma相关的地址能够被正确处理</p>
 <ol>
@@ -209,7 +388,7 @@
 <li><code>readi</code>将文件的内容读入物理页面，其中偏移部分通过当前地址和vma记录的addr做差值得到，因为一读就是一个页面，因此还要将这个偏移向PGSIZE舍入</li>
 <li>将映射关系通过<code>uvmmap</code>写入到页表</li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (r_scause() == <span class="number">13</span> || r_scause() == <span class="number">15</span>) &#123;</span><br><span class="line">        <span class="comment">// #ifdef LAB_MMAP</span></span><br><span class="line">        <span class="keyword">if</span> (mmap_handler(r_stval(), r_scause()) == <span class="number">-1</span>) &#123;</span><br><span class="line">            p-&gt;killed = <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// #endif</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((which_dev = devintr()) != <span class="number">0</span>) &#123;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="type">int</span> mmap_handler(uint64 va, uint64 r_cause) &#123;</span><br><span class="line">    <span class="keyword">struct</span> proc *p = myproc();</span><br><span class="line">    <span class="comment">// 地址不合法</span></span><br><span class="line">    <span class="keyword">if</span> (va &gt;= p-&gt;sz || va &lt; p-&gt;trapframe-&gt;sp) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 是否和vma有关系</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vma</span> *<span class="title">vma</span> =</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (p-&gt;vmas[i].valid == <span class="number">1</span> &amp;&amp; (va &gt;= p-&gt;vmas[i].addr &amp;&amp; va &lt; p-&gt;vmas[i].addr + p-&gt;vmas[i].length)) &#123;</span><br><span class="line">            vma = &amp;p-&gt;vmas[i];</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 和vma没关系</span></span><br><span class="line">    <span class="keyword">if</span> (vma == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 和vma是有关的</span></span><br><span class="line">    <span class="comment">// 看看权限是否正确</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">file</span> =</span> vma-&gt;file;</span><br><span class="line">    <span class="comment">// 不能读，但是你读了</span></span><br><span class="line">    <span class="keyword">if</span> (!file-&gt;readable &amp;&amp; r_cause == <span class="number">13</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 不能写，但是你写了</span></span><br><span class="line">    <span class="keyword">if</span> (!file-&gt;writable &amp;&amp; r_cause == <span class="number">15</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 构建pte的标志位</span></span><br><span class="line">    <span class="type">int</span> pte_flag = PTE_U;</span><br><span class="line">    <span class="keyword">if</span> (vma-&gt;prot &amp; PROT_READ) &#123;</span><br><span class="line">        pte_flag |= PTE_R;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (vma-&gt;prot &amp; PROT_WRITE) &#123;</span><br><span class="line">        pte_flag |= PTE_W;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (vma-&gt;prot &amp; PROT_EXEC) &#123;</span><br><span class="line">        pte_flag |= PTE_X;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 先分配一个物理页面</span></span><br><span class="line">    uint64 pa = (uint64)kalloc();</span><br><span class="line">    <span class="keyword">if</span> (pa == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">memset</span>((<span class="type">void</span> *)pa, <span class="number">0</span>, PGSIZE);</span><br><span class="line">    <span class="comment">// 成功分配物理页面，从文件中读</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">inode</span> *<span class="title">ip</span> =</span> file-&gt;ip;</span><br><span class="line">    ilock(ip);</span><br><span class="line">    <span class="comment">// 读取失败</span></span><br><span class="line">    <span class="keyword">if</span> (readi(ip, <span class="number">0</span>, pa, PGROUNDDOWN(va - vma-&gt;addr), PGSIZE) == <span class="number">0</span>) &#123;</span><br><span class="line">        iunlock(ip);</span><br><span class="line">        kfree((<span class="type">void</span> *)pa);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    iunlock(ip);</span><br><span class="line">    <span class="comment">// 加入映射</span></span><br><span class="line">    <span class="keyword">if</span> (mappages(p-&gt;pagetable, PGROUNDDOWN(va), PGSIZE, pa, pte_flag) != <span class="number">0</span>) &#123;</span><br><span class="line">        kfree((<span class="type">void</span> *)pa);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (r_scause() == <span class="hljs-number">13</span> || r_scause() == <span class="hljs-number">15</span>) &#123;<br>        <span class="hljs-comment">// #ifdef LAB_MMAP</span><br>        <span class="hljs-keyword">if</span> (mmap_handler(r_stval(), r_scause()) == <span class="hljs-number">-1</span>) &#123;<br>            p-&gt;killed = <span class="hljs-number">-1</span>;<br>        &#125;<br>        <span class="hljs-comment">// #endif</span><br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((which_dev = devintr()) != <span class="hljs-number">0</span>) &#123;<br>    <br>    <br><span class="hljs-type">int</span> mmap_handler(uint64 va, uint64 r_cause) &#123;<br>    <span class="hljs-keyword">struct</span> proc *p = myproc();<br>    <span class="hljs-comment">// 地址不合法</span><br>    <span class="hljs-keyword">if</span> (va &gt;= p-&gt;sz || va &lt; p-&gt;trapframe-&gt;sp) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-comment">// 是否和vma有关系</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vma</span> *<span class="hljs-title">vma</span> =</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; i++) &#123;<br>        <span class="hljs-keyword">if</span> (p-&gt;vmas[i].valid == <span class="hljs-number">1</span> &amp;&amp; (va &gt;= p-&gt;vmas[i].addr &amp;&amp; va &lt; p-&gt;vmas[i].addr + p-&gt;vmas[i].length)) &#123;<br>            vma = &amp;p-&gt;vmas[i];<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 和vma没关系</span><br>    <span class="hljs-keyword">if</span> (vma == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-comment">// 和vma是有关的</span><br>    <span class="hljs-comment">// 看看权限是否正确</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">file</span> *<span class="hljs-title">file</span> =</span> vma-&gt;file;<br>    <span class="hljs-comment">// 不能读，但是你读了</span><br>    <span class="hljs-keyword">if</span> (!file-&gt;readable &amp;&amp; r_cause == <span class="hljs-number">13</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-comment">// 不能写，但是你写了</span><br>    <span class="hljs-keyword">if</span> (!file-&gt;writable &amp;&amp; r_cause == <span class="hljs-number">15</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-comment">// 构建pte的标志位</span><br>    <span class="hljs-type">int</span> pte_flag = PTE_U;<br>    <span class="hljs-keyword">if</span> (vma-&gt;prot &amp; PROT_READ) &#123;<br>        pte_flag |= PTE_R;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (vma-&gt;prot &amp; PROT_WRITE) &#123;<br>        pte_flag |= PTE_W;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (vma-&gt;prot &amp; PROT_EXEC) &#123;<br>        pte_flag |= PTE_X;<br>    &#125;<br>    <span class="hljs-comment">// 先分配一个物理页面</span><br>    uint64 pa = (uint64)kalloc();<br>    <span class="hljs-keyword">if</span> (pa == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-built_in">memset</span>((<span class="hljs-type">void</span> *)pa, <span class="hljs-number">0</span>, PGSIZE);<br>    <span class="hljs-comment">// 成功分配物理页面，从文件中读</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">inode</span> *<span class="hljs-title">ip</span> =</span> file-&gt;ip;<br>    ilock(ip);<br>    <span class="hljs-comment">// 读取失败</span><br>    <span class="hljs-keyword">if</span> (readi(ip, <span class="hljs-number">0</span>, pa, PGROUNDDOWN(va - vma-&gt;addr), PGSIZE) == <span class="hljs-number">0</span>) &#123;<br>        iunlock(ip);<br>        kfree((<span class="hljs-type">void</span> *)pa);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    iunlock(ip);<br>    <span class="hljs-comment">// 加入映射</span><br>    <span class="hljs-keyword">if</span> (mappages(p-&gt;pagetable, PGROUNDDOWN(va), PGSIZE, pa, pte_flag) != <span class="hljs-number">0</span>) &#123;<br>        kfree((<span class="hljs-type">void</span> *)pa);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="munmap"><a href="#munmap" class="headerlink" title="munmap"></a>munmap</h2><blockquote>
 <p>lab对munmap的情况做了简化，只会从头开始unmap，因此在将数据写回磁盘时，直接调用filewrite函数，它在内部会自动调用file的偏移</p>
@@ -221,7 +400,7 @@
 <li>如果需要写入，则通过filewrite函数写入磁盘，这个函数的参数很简单，第一个是文件的指针，第二个是起始的虚拟地址，第三个是length</li>
 <li>将进程的页表给<code>uvmunmap</code>掉，因为lab的仁慈，这里的参数传递也很简单，addr全都是PGSIZE的倍数</li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">uint64</span><br><span class="line"><span class="title function_">sys_munmap</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    uint64 addr;</span><br><span class="line">    <span class="type">int</span> length;</span><br><span class="line">    <span class="keyword">if</span> (argaddr(<span class="number">0</span>, &amp;addr) &lt; <span class="number">0</span> || argint(<span class="number">1</span>, &amp;length) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 先找到对应vma</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span> =</span> myproc();</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vma</span> *<span class="title">vma</span> =</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (p-&gt;vmas[i].valid == <span class="number">1</span> &amp;&amp; (addr &gt;= p-&gt;vmas[i].addr &amp;&amp; addr &lt; p-&gt;vmas[i].addr + p-&gt;vmas[i].length)) &#123;</span><br><span class="line">            vma = &amp;p-&gt;vmas[i];</span><br><span class="line">            <span class="comment">// 头部</span></span><br><span class="line">            <span class="keyword">if</span> (vma-&gt;addr == addr) &#123;</span><br><span class="line">                vma-&gt;addr += length;</span><br><span class="line">                vma-&gt;length -= length;</span><br><span class="line">                <span class="comment">// 尾部</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (addr + length == vma-&gt;addr + vma-&gt;length) &#123;</span><br><span class="line">                vma-&gt;length -= length;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (vma == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果是shared，需要先写回磁盘</span></span><br><span class="line">    <span class="keyword">if</span> (vma-&gt;flag == MAP_SHARED) &#123;</span><br><span class="line">        filewrite(vma-&gt;file, addr, length);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 修改页表</span></span><br><span class="line">    uvmunmap(p-&gt;pagetable, addr, length / PGSIZE, <span class="number">1</span>);</span><br><span class="line">    <span class="comment">//如果map区域为0</span></span><br><span class="line">    <span class="keyword">if</span> (vma-&gt;length == <span class="number">0</span>) &#123;</span><br><span class="line">        fileclose(vma-&gt;file);</span><br><span class="line">        vma-&gt;valid = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c">uint64<br><span class="hljs-title function_">sys_munmap</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    uint64 addr;<br>    <span class="hljs-type">int</span> length;<br>    <span class="hljs-keyword">if</span> (argaddr(<span class="hljs-number">0</span>, &amp;addr) &lt; <span class="hljs-number">0</span> || argint(<span class="hljs-number">1</span>, &amp;length) &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-comment">// 先找到对应vma</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> myproc();<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vma</span> *<span class="hljs-title">vma</span> =</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; i++) &#123;<br>        <span class="hljs-keyword">if</span> (p-&gt;vmas[i].valid == <span class="hljs-number">1</span> &amp;&amp; (addr &gt;= p-&gt;vmas[i].addr &amp;&amp; addr &lt; p-&gt;vmas[i].addr + p-&gt;vmas[i].length)) &#123;<br>            vma = &amp;p-&gt;vmas[i];<br>            <span class="hljs-comment">// 头部</span><br>            <span class="hljs-keyword">if</span> (vma-&gt;addr == addr) &#123;<br>                vma-&gt;addr += length;<br>                vma-&gt;length -= length;<br>                <span class="hljs-comment">// 尾部</span><br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (addr + length == vma-&gt;addr + vma-&gt;length) &#123;<br>                vma-&gt;length -= length;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (vma == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-comment">// 如果是shared，需要先写回磁盘</span><br>    <span class="hljs-keyword">if</span> (vma-&gt;flag == MAP_SHARED) &#123;<br>        filewrite(vma-&gt;file, addr, length);<br>    &#125;<br>    <span class="hljs-comment">// 修改页表</span><br>    uvmunmap(p-&gt;pagetable, addr, length / PGSIZE, <span class="hljs-number">1</span>);<br>    <span class="hljs-comment">//如果map区域为0</span><br>    <span class="hljs-keyword">if</span> (vma-&gt;length == <span class="hljs-number">0</span>) &#123;<br>        fileclose(vma-&gt;file);<br>        vma-&gt;valid = <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>这里有几个小补丁要打，分别是<code>uvmunmap</code>和<code>uvmcopy</code>，它们在查找页表的时候，如果发现pte无效，会panic，这里直接忽略，因为可能是mmap还没有分配物理地址的区域</p>
 <h2 id="exit"><a href="#exit" class="headerlink" title="exit"></a>exit</h2><p>这个函数是用于进程死亡时，就所有的mmap区域都给删掉</p>
@@ -235,10 +414,10 @@
 </ol>
 </li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将所有的映射区取消</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (p-&gt;vmas[i].valid) &#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">vma</span> *<span class="title">vma</span> =</span> &amp;p-&gt;vmas[i];</span><br><span class="line">        <span class="keyword">if</span> (vma-&gt;flag == MAP_SHARED) &#123;</span><br><span class="line">            filewrite(vma-&gt;file, vma-&gt;addr, vma-&gt;length);</span><br><span class="line">        &#125;</span><br><span class="line">        fileclose(vma-&gt;file);</span><br><span class="line">        vma-&gt;valid = <span class="number">0</span>;</span><br><span class="line">        uvmunmap(p-&gt;pagetable, vma-&gt;addr, vma-&gt;length / PGSIZE, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 将所有的映射区取消</span><br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; i++) &#123;<br>    <span class="hljs-keyword">if</span> (p-&gt;vmas[i].valid) &#123;<br>        <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vma</span> *<span class="hljs-title">vma</span> =</span> &amp;p-&gt;vmas[i];<br>        <span class="hljs-keyword">if</span> (vma-&gt;flag == MAP_SHARED) &#123;<br>            filewrite(vma-&gt;file, vma-&gt;addr, vma-&gt;length);<br>        &#125;<br>        fileclose(vma-&gt;file);<br>        vma-&gt;valid = <span class="hljs-number">0</span>;<br>        uvmunmap(p-&gt;pagetable, vma-&gt;addr, vma-&gt;length / PGSIZE, <span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h2><p>这个函数主要用于子进程将父进程的mmap区域都给拷贝过来，要不然子进程一旦访问还没有分配物理地址的mmap区域，在usertrap里就不能正确处理它了</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将父进程的mmap也拷贝给它</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vma</span> *<span class="title">vma</span> =</span> &amp;p-&gt;vmas[i];</span><br><span class="line">    <span class="keyword">if</span> (vma-&gt;valid) &#123;</span><br><span class="line">        memmove(&amp;np-&gt;vmas[i], vma, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> vma));</span><br><span class="line">        filedup(vma-&gt;file);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 将父进程的mmap也拷贝给它</span><br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; i++) &#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vma</span> *<span class="hljs-title">vma</span> =</span> &amp;p-&gt;vmas[i];<br>    <span class="hljs-keyword">if</span> (vma-&gt;valid) &#123;<br>        memmove(&amp;np-&gt;vmas[i], vma, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> vma));<br>        filedup(vma-&gt;file);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
@@ -268,121 +447,338 @@
 
 
 
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Hello World</div>
+      <div>http://example.com/2023/12/20/lab10 mmap/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年12月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/12/20/lab10%20mmap/" data-id="clqdh1sby0000y8u9fk0n02cm" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-  
-    <a href="/2023/12/20/test3/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">test3</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">December 2023</a></li></ul>
-    </div>
+    <div class="license-icon iconfont"></div>
   </div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2023/12/20/lab10%20mmap/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2023/12/20/test3/">test3</a>
-          </li>
-        
-          <li>
-            <a href="/2023/12/20/test1/">test1</a>
-          </li>
-        
-          <li>
-            <a href="/2023/12/20/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
 
-  
-</aside>
-        
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/12/20/test3/" title="test3">
+                        <span class="hidden-mobile">test3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2023 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
     </div>
-  </div>
-</footer>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
 
     </div>
-    <nav id="mobile-nav">
+  </div>
+</div>
+
+
+
+
+
   
-    <a href="/" class="mobile-nav-link">Home</a>
+
+
+
   
-    <a href="/archives" class="mobile-nav-link">Archives</a>
+
+
+
   
-</nav>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
 
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-<script src="/js/jquery-3.6.4.min.js"></script>
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
 
 
 
   
-<script src="/fancybox/jquery.fancybox.min.js"></script>
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
 
-<script src="/js/script.js"></script>
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
 
 
 
 
 
-  </div>
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 </body>
 </html>
