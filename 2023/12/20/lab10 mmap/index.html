@@ -18,16 +18,17 @@
   <meta name="author" content="Cao Dong">
   <meta name="keywords" content="">
   
-    <meta name="description" content="task hints 思路 基础设置 增加数据结构 sys_mmap usertrap munmap exit fork    task mmap的定义如下 12void *mmap(void *addr, size_t length, int prot, int flags,           int fd, off_t offset);   在这个lab中，addr永远为0，即内核决定用">
+    <meta name="description" content="task hints 思路 基础设置 增加数据结构 sys_mmap usertrap munmap exit fork    task mmap的定义如下 12void *mmap(void *addr, size_t length, int prot, int flags,           int fd, off_t offset);   在这个lab中，addr永远为0，即内核决定">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lab10">
 <meta property="og:url" content="http://example.com/2023/12/20/lab10%20mmap/index.html">
 <meta property="og:site_name" content="dcao&#39;s blog">
-<meta property="og:description" content="task hints 思路 基础设置 增加数据结构 sys_mmap usertrap munmap exit fork    task mmap的定义如下 12void *mmap(void *addr, size_t length, int prot, int flags,           int fd, off_t offset);   在这个lab中，addr永远为0，即内核决定用">
+<meta property="og:description" content="task hints 思路 基础设置 增加数据结构 sys_mmap usertrap munmap exit fork    task mmap的定义如下 12void *mmap(void *addr, size_t length, int prot, int flags,           int fd, off_t offset);   在这个lab中，addr永远为0，即内核决定">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/2f6681728fc0423338ba88d2bce82c6b.png">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231220220415465.png">
 <meta property="article:published_time" content="2023-12-20T07:46:23.581Z">
-<meta property="article:modified_time" content="2023-12-20T12:12:13.482Z">
+<meta property="article:modified_time" content="2023-12-20T14:04:28.535Z">
 <meta property="article:author" content="Cao Dong">
 <meta property="article:tag" content="Operating System">
 <meta property="article:tag" content="MIT6.S081">
@@ -294,6 +295,7 @@
               <div class="markdown-body">
                 
                 <p><img src="https://img-blog.csdnimg.cn/img_convert/2f6681728fc0423338ba88d2bce82c6b.png" srcset="/img/loading.gif" lazyload alt="image-20230829232154575"></p>
+<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231220220415465.png" srcset="/img/loading.gif" lazyload alt="image-20231220220415465"></p>
 <ul>
 <li><a href="#task">task</a></li>
 <li><a href="#hints">hints</a></li>
@@ -450,7 +452,6 @@
 
 <h2 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h2><p>这个函数主要用于子进程将父进程的mmap区域都给拷贝过来，要不然子进程一旦访问还没有分配物理地址的mmap区域，在usertrap里就不能正确处理它了</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 将父进程的mmap也拷贝给它</span><br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; i++) &#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">vma</span> *<span class="hljs-title">vma</span> =</span> &amp;p-&gt;vmas[i];<br>    <span class="hljs-keyword">if</span> (vma-&gt;valid) &#123;<br>        memmove(&amp;np-&gt;vmas[i], vma, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> vma));<br>        filedup(vma-&gt;file);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
 
 
 
