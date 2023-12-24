@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Cao Dong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="参考大佬 前情提要  这个实验和之前的不太一样，最好要去把书看一遍，很多具体的实验的方法，思想，甚至是代码在书上已经给出了，自己很难想出来  实验总览 总共有16个trace，运行make test0x 与 make rtest0x，比较结果是否相同 实验内容 eval: Main routine that parses and interprets the command line. 70 li">
+<meta property="og:type" content="article">
+<meta property="og:title" content="csapp_lab5">
+<meta property="og:url" content="http://example.com/2023/08/03/csapp-lab5/index.html">
+<meta property="og:site_name" content="dcao&#39;s blog">
+<meta property="og:description" content="参考大佬 前情提要  这个实验和之前的不太一样，最好要去把书看一遍，很多具体的实验的方法，思想，甚至是代码在书上已经给出了，自己很难想出来  实验总览 总共有16个trace，运行make test0x 与 make rtest0x，比较结果是否相同 实验内容 eval: Main routine that parses and interprets the command line. 70 li">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-03T12:28:08.000Z">
+<meta property="article:modified_time" content="2023-12-24T12:28:50.600Z">
+<meta property="article:author" content="Cao Dong">
+<meta property="article:tag" content="CSAPP">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>csapp_lab5 - dcao&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CaoDong</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/scenery/p1.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="csapp_lab5"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Cao Dong
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-03 20:28" pubdate>
+          2023年8月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">csapp_lab5</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/492645370">参考大佬</a></p>
+<p>前情提要</p>
+<ol>
+<li>这个实验和之前的不太一样，最好要去把书看一遍，很多具体的实验的方法，思想，甚至是代码在书上已经给出了，自己很难想出来</li>
+</ol>
+<h1 id="实验总览"><a href="#实验总览" class="headerlink" title="实验总览"></a>实验总览</h1><ol>
+<li>总共有16个trace，运行make test0x 与 make rtest0x，比较结果是否相同</li>
+<li>实验内容<ul>
+<li><code>eval</code>: Main routine that parses and interprets the command line. 70 lines </li>
+<li><code>builtin cmd</code>: Recognizes and interprets the built-in commands: quit, fg, bg, and jobs. 25 lines</li>
+<li><code>do bgfg</code>: Implements the bg and fg built-in commands. 50 lines</li>
+<li><code>waitfg</code>: Waits for a foreground job to complete. 20 lines</li>
+<li><code>sigchld handler</code>: Catches SIGCHILD signals. 80 lines</li>
+<li><code>sigint handler</code>: Catches SIGINT (ctrl-c) signals. 15 lines</li>
+<li><code>sigtstp handler</code>: Catches SIGTSTP (ctrl-z) signals. 15 lines</li>
+</ul>
+</li>
+</ol>
+<h1 id="什么是shell？"><a href="#什么是shell？" class="headerlink" title="什么是shell？"></a>什么是shell？</h1><p>shell通常用来指命令行，我们可以通过这个命令行去启动各种程序<br>那么，这个命令行是如何启动这些程序的呢？</p>
+<ol>
+<li>shell将自己作为父进程</li>
+<li>shell创建一个子进程去启动各种程序<br>那么，shell其实也就是一个进程，也不过是一个比较特殊的程序，那它这个程序是什么样的呢？</li>
+<li>不断地循环，并打印一个提示符，我们这个lab的提示符就是这样<code>tsh&gt;</code></li>
+<li>然后通过fgets获得我们的输入，我们的输入通常就是程序的路径（名字）以及这个程序的参数</li>
+<li>通过我们的输入去启动程序。这里就有两种程序了，一种是前台程序，一种是后台程序<ol>
+<li>首先要明确一点，前台程序和后台程序没有本质上的区别，运行起来都是一个进程而已</li>
+<li>前台进程比较特殊的一点就是，它会阻塞shell，一直到自己执行完了，然后让shell继续执行</li>
+</ol>
+</li>
+</ol>
+<h1 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h1><p>eval函数的功能其实类似于一个启动器</p>
+<ol>
+<li>获取我们输入的各种信息</li>
+<li>按照我们的要求去创建子进程，操作父进程</li>
+</ol>
+<p>第一步，获取各种输入的信息，这个就比较简单了，因为已经提供了写好的<code>parseline</code>函数，我们只需要调用即可。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 首先根据cmdline，解析这一行命令。由于我们在解析的函数中修改了传入的cmdline，所以用了一个备份的buffer。</span><br><span class="hljs-comment">// 同时解析函数的返回值其实就代表了当前这个被命令行启动的进程是前天还是后台运行的</span><br><span class="hljs-comment">// 但是其实好像不备份也行，留坑！</span><br><span class="hljs-type">char</span> buffer[MAXLINE];<br><span class="hljs-built_in">strcpy</span>(buffer, cmdline);<br><span class="hljs-type">char</span> *argv[MAXARGS];<br><span class="hljs-type">int</span> is_bg = parseline(buffer, argv);<br><span class="hljs-comment">// 题目已经定义为bg和fg，所以按照题目意思来定义状态</span><br><span class="hljs-type">int</span> state = is_bg ? BG : FG;<br><span class="hljs-comment">// 如果解析出来是个空的命令行，则直接return</span><br><span class="hljs-keyword">if</span> (argv[<span class="hljs-number">0</span>] == <span class="hljs-literal">NULL</span>) &#123;<br>  <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>第二步，就比较复杂了。<br>首先想一想，父进程需要做什么？</p>
+<p>父进程</p>
+<ol start="3">
+<li>创建子进程</li>
+<li>为子进程创建一个对应的job</li>
+<li>根据子进程的类型决定自己是否需要阻塞，等到子进程执行完毕<br>这里有两个注意点</li>
+<li>创建子进程之前父进程需要阻塞掉<code>SIGCHLD</code>信号<ol>
+<li>这个信号是子进程死亡后向父进程发出的信号</li>
+<li>为什么要阻塞这个呢？<ol>
+<li>如果刚创建好子进程，子进程就获得了cpu的使用权</li>
+<li>然后子进程马上就执行完成，发出这个死亡的信号给父进程</li>
+<li>父进程拿到cpu并且受到信号后就需要调用对应的处理函数，这个处理函数需要在job中删除对应项</li>
+<li>但是因为刚创建好子进程之后父进程就没有用过cpu，父进程压根没来得及在job中为子进程创建对应项，所以这个删除操作肯定是失败的</li>
+<li>等父进程拿到cpu之后，才给子进程注册了一个job，可是子进程早就结束了，也就是说父进程永远等不到这个子进程的死亡信号</li>
+<li>因此这个job永远不会被删除</li>
+</ol>
+</li>
+<li>因此在创建子进程之后需要阻塞这个信号，再父进程完成为子进程注册job之后，就可以解除这个阻塞</li>
+</ol>
+</li>
+<li>操作job之前需要阻塞掉所有的信号<ol>
+<li>这个是因为jobs是一个全局变量，为了防止并发的问题，必须要阻塞掉所以的信号，包括切换进程的信号</li>
+<li>这个有点像操作系统的各种锁的作用，保护临界资源的<br>那么子进程需要干嘛呢？</li>
+</ol>
+</li>
+<li>首先，子进程继承了父进程的所有资源，而父进程在创建它之前已经阻塞了SIGCHLD信号量，子进程最好先将这个接触，避免可能的问题</li>
+<li>子进程需要修改自己的组号，刚被创建时是和父进程一个组的。之所以要和父进程不同组，是为了防止子进程收到某些信号影响到同属一个组的父进程，比如对子进程发出kill命令的时候，往往是对子进程所在的组发出kill命令，如果不修改子进程组号，会把父进程也就是shell给kill了。</li>
+<li>根据命令行的输入，使用<code>execve</code>函数启动对应的程序</li>
+<li>终止</li>
+</ol>
+<p>子进程这里需要注意一点，那就是用户输入的程序可能是不存在的，因此，对于execve函数的结果需要特殊处理一下</p>
+<p>整个eval函数的实现如下，其中涉及了一些信号相关的操作比较陌生</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">eval</span><span class="hljs-params">(<span class="hljs-type">char</span> *cmdline)</span> &#123;<br>  <span class="hljs-comment">// 首先根据cmdline，解析这一行命令。由于我们在解析的函数中修改了传入的cmdline，所以用了一个备份的buffer。</span><br>  <span class="hljs-comment">// 同时解析函数的返回值其实就代表了当前这个被命令行启动的进程是前天还是后台运行的</span><br>  <span class="hljs-comment">// 但是其实好像不备份也行，留坑！</span><br>  <span class="hljs-type">char</span> buffer[MAXLINE];<br>  <span class="hljs-built_in">strcpy</span>(buffer, cmdline);<br>  <span class="hljs-type">char</span> *argv[MAXARGS];<br>  <span class="hljs-type">int</span> is_bg = parseline(buffer, argv);<br>  <span class="hljs-comment">// 题目已经定义为bg和fg，所以按照题目意思来定义状态</span><br>  <span class="hljs-type">int</span> state = is_bg ? BG : FG;<br>  <span class="hljs-comment">// 如果解析出来是个空的命令行，则直接return</span><br>  <span class="hljs-keyword">if</span> (argv[<span class="hljs-number">0</span>] == <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-keyword">return</span>;<br>  &#125;<br>  <span class="hljs-comment">// 下面是核心操作部分</span><br>  <span class="hljs-comment">// 创建信号集并初始化，分别是不理会所有信号，不理会一个信号（SIGCHLD），和备份之前的信号</span><br>  <span class="hljs-type">sigset_t</span> all_mask, one_mask, pre_mask;<br>  sigfillset(&amp;all_mask);<br>  sigemptyset(&amp;one_mask);<br>  sigaddset(&amp;one_mask, SIGCHLD);<br>  <span class="hljs-comment">// 如果即将创建的进程不是系统程序，那下面这个函数会返回0</span><br>  <span class="hljs-comment">// 如果是系统程序，那这个函数内部就直接执行了， 不需要我们管了</span><br>  <span class="hljs-comment">// 因此，我们只需要处理非系统程序的情况</span><br>  <span class="hljs-type">pid_t</span> pid;<br>  <span class="hljs-keyword">if</span> (!builtin_cmd(argv)) &#123;<br>    <span class="hljs-comment">// 在调用fork之前就要阻塞SIGCHLD信号</span><br>    sigprocmask(SIG_BLOCK, &amp;one_mask, &amp;pre_mask);<br>    <span class="hljs-keyword">if</span> ((pid = fork()) == <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-comment">// 子进程</span><br>      <span class="hljs-comment">// 子进程首先解除从父进程那继承来的阻塞信号</span><br>      sigprocmask(SIG_SETMASK, &amp;pre_mask, <span class="hljs-literal">NULL</span>);<br>      <span class="hljs-comment">// 修改自己的组id为自己的id</span><br>      setpgid(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>      <span class="hljs-comment">// 创建真正的进程，其中environ是在libc文件中定义的</span><br>      Execve(argv[<span class="hljs-number">0</span>], argv, environ);<br>      <span class="hljs-comment">// 真正的进程执行完之后，子进程也就完成使命了，使用exit终止进程，更加强劲！</span><br>      <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-comment">// 父进程继续操作</span><br>    <span class="hljs-comment">// 首先获取全局锁，因为要修改全局变量了</span><br>    sigprocmask(SIG_BLOCK, &amp;all_mask, <span class="hljs-literal">NULL</span>);<br>    addjob(jobs, pid, state, cmdline);<br>    sigprocmask(SIG_SETMASK, &amp;one_mask, <span class="hljs-literal">NULL</span>);<br>    <span class="hljs-comment">// 如果是前台进程，则父进程要阻塞到这个前台进程结束</span><br>    <span class="hljs-comment">// 如果是后台进程，则父进程打印这个后台进程的信息</span><br>    <span class="hljs-keyword">if</span> (state == FG) &#123;<br>      waitfg(pid);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;[%d] (%d) %s&quot;</span>, pid2jid(pid), pid, cmdline);<br>    &#125;<br>    <span class="hljs-comment">// 父进程ok了，可以去接受SIGCHLD信号</span><br>    sigprocmask(SIG_SETMASK, &amp;pre_mask, <span class="hljs-literal">NULL</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="builtin-cmd"><a href="#builtin-cmd" class="headerlink" title="builtin_cmd"></a>builtin_cmd</h1><p>这个函数就比较简单了，用来判断用户输入的是否是内置的程序</p>
+<p>tsh中要求的内置程序只有<code>quit</code>，<code>bg</code>，<code>fg</code>，<code>jobs</code></p>
+<p>这个实现没什么好说的，可能有点前置的知识那就是，argv这个变量，可以看做一个一维数组，其中</p>
+<p>每个值都是一个字符串</p>
+<ol>
+<li>第一个字符串是程序的名字</li>
+<li>后面的每个字符串都代表了一个参数</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">builtin_cmd</span><span class="hljs-params">(<span class="hljs-type">char</span> **argv)</span> &#123;<br>  <span class="hljs-comment">// 总共要处理 quit bg fg jobs，并&amp;</span><br>  <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">strcmp</span>(argv[<span class="hljs-number">0</span>], <span class="hljs-string">&quot;quit&quot;</span>)) &#123;<br>    <span class="hljs-comment">// quit指令，直接终止</span><br>    <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>  &#125;<br>  <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">strcmp</span>(argv[<span class="hljs-number">0</span>], <span class="hljs-string">&quot;bg&quot;</span>) || !<span class="hljs-built_in">strcmp</span>(argv[<span class="hljs-number">0</span>], <span class="hljs-string">&quot;fg&quot;</span>)) &#123;<br>    <span class="hljs-comment">// 执行bg或者fg</span><br>    do_bgfg(argv);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>  &#125;<br>  <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">strcmp</span>(argv[<span class="hljs-number">0</span>], <span class="hljs-string">&quot;jobs&quot;</span>)) &#123;<br>    <span class="hljs-comment">// 列出jobs</span><br>    listjobs(jobs);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="do-bgfg"><a href="#do-bgfg" class="headerlink" title="do_bgfg"></a>do_bgfg</h1><p><code>void do_bgfg(char **argv)</code></p>
+<p>这个函数是要我们将某个job唤醒，或者由后台操作变成前台操作</p>
+<ol>
+<li>首先，我们需要知道到底是要变成前台还是后台，这个参数存在<code>argv[0]</code>中</li>
+<li>然后我们需要拿出具体的pid或者jid，其中jid通过%起始以做区别。<ol>
+<li>需要处理这个参数为空情况，即没有给出任何的pid或者jid。</li>
+<li>需要处理输入的pid或者jid非法的情况</li>
+</ol>
+</li>
+<li>通过具体的pid或者jid拿到对应的job，如果找不到这个job，说明不存在</li>
+<li>给这个job发出一个<code>SIGCONT</code>的信号，不管它之前咋样，现在都醒过来</li>
+<li>修改这个job的状态位前台或者后台</li>
+<li>根据前台还是后台，决定当前进程是否需要等待<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">do_bgfg</span><span class="hljs-params">(<span class="hljs-type">char</span> **argv)</span> &#123;<br>  <span class="hljs-comment">// 后面要用到</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">job_t</span> *<span class="hljs-title">job</span> =</span> <span class="hljs-literal">NULL</span>;<br><br>  <span class="hljs-comment">// 这个函数需要处理多种输入，包括一些非法输入</span><br>  <span class="hljs-comment">// 首先是确认到底是bg操作还是fg操作</span><br>  <span class="hljs-type">int</span> state = (<span class="hljs-built_in">strcmp</span>(argv[<span class="hljs-number">0</span>], <span class="hljs-string">&quot;bg&quot;</span>) == <span class="hljs-number">0</span>) ? BG : FG;<br><br>  <span class="hljs-comment">// 然后判断是否给出了具体的pid或者jid，如果没有给出正确的参数，那要给出提示</span><br>  <span class="hljs-comment">// 首先看看是否有参数</span><br>  <span class="hljs-keyword">if</span> (argv[<span class="hljs-number">1</span>] == <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s command requires PID or %%jobid argument\n&quot;</span>, argv[<span class="hljs-number">0</span>]);<br>    <span class="hljs-keyword">return</span>;<br>  &#125;<br>  <span class="hljs-comment">// 有参数，那就先看看是不是jid</span><br>  <span class="hljs-keyword">if</span> (argv[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] == <span class="hljs-string">&#x27;%&#x27;</span>) &#123;<br>    <span class="hljs-comment">// 使用sscanf尝试获取jid</span><br>    <span class="hljs-type">int</span> jid;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">sscanf</span>(&amp;argv[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>], <span class="hljs-string">&quot;%d&quot;</span>, &amp;jid) &gt; <span class="hljs-number">0</span>) &#123;<br>      job = getjobjid(jobs, jid);<br>      <span class="hljs-comment">// 如果getjobjid返回null，则说明没有这个job</span><br>      <span class="hljs-keyword">if</span> (job == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%%%d: No such job\n&quot;</span>, jid);<br>        <span class="hljs-keyword">return</span>;<br>      &#125;<br>    &#125;<br>    <span class="hljs-comment">// 到了这里，那肯定有参数，并且不是jid，但是也有可能是瞎输入的先排除一下</span><br>  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">isdigit</span>(argv[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>])) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s: argument must be a PID or %%jobid\n&quot;</span>, argv[<span class="hljs-number">0</span>]);<br>    <span class="hljs-keyword">return</span>;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-comment">// 肯定输入的是pid了</span><br>    <span class="hljs-type">pid_t</span> pid;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">sscanf</span>(argv[<span class="hljs-number">1</span>], <span class="hljs-string">&quot;%d&quot;</span>, &amp;pid) &gt; <span class="hljs-number">0</span>) &#123;<br>      job = getjobpid(jobs, pid);<br>      <span class="hljs-keyword">if</span> (job == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;(%d): No such process\n&quot;</span>, pid);<br>        <span class="hljs-keyword">return</span>;<br>      &#125;<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-comment">// 如果能够走到这里，那么说明已经正确取到对应的job了</span><br>  <span class="hljs-comment">// 唤醒这个job，修改状态</span><br>  <span class="hljs-comment">// 这里没有使用进程组，留坑！</span><br>  kill(-job-&gt;pid, SIGCONT);<br>  job-&gt;state = state;<br>  <span class="hljs-comment">// 根据bg或者fg进行特定的操作</span><br>  <span class="hljs-keyword">if</span> (state == BG) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;[%d] (%d) %s&quot;</span>, job-&gt;jid, job-&gt;pid, job-&gt;cmdline);<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    waitfg(job-&gt;pid);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="waitfg"><a href="#waitfg" class="headerlink" title="waitfg"></a>waitfg</h1><p><code>void waitfg(pid_t pid)</code></p>
+<p>这个函数需要做到，当pid还是前台程序的时候，调用waitfg的程序一直休眠</p>
+<p>首先，lab已经给我们提供了一个函数<code>fgpid</code>去检查是否还有程序是前台程序</p>
+<ol>
+<li>理论上，我们只需要不断地循环，如果发现还有程序是前台程序，那自己就sleep一下就可以了</li>
+<li>但是这样的话，可能会很浪费时间，因为我们不知道到底要sleep多久</li>
+</ol>
+<p>所以，我们最好还是使用信号的机制，书上介绍了一个很牛逼的函数<code>sigsuspend</code></p>
+<p>具体的优点书上已经详细介绍了，这里不赘述</p>
+<p>这里就有个问题，正常来说，调用这个函数之前，进程应该是阻塞了<code>SIGCHLD</code>信号才对的</p>
+<p>而我的实现里，有两处调用了这个函数，其中do_bgfg是没有阻塞上述的那个信号，但是也没有出现死锁，应该是测试数据太水了导致的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">waitfg</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid)</span> &#123;<br>  <span class="hljs-comment">// 注意，进入这个函数的时候，父进程已经阻塞了子进程可能传来的SIGCHLD信号</span><br>  <span class="hljs-comment">// 而我们使用的sigsuspend函数会让父进程进入一个完全没有阻塞信号的状态</span><br>  <span class="hljs-comment">// 因此，只要有一个子进程挂了，父进程就会跳出阻塞去检查一下是否还有前台进程</span><br>  <span class="hljs-comment">// 感觉有点问题，这里实现的好像太严格了，不只考虑了pid，还考虑所有前台进程，留坑</span><br>  <span class="hljs-type">sigset_t</span> none_mask;<br>  sigemptyset(&amp;none_mask);<br>  <span class="hljs-keyword">while</span> (fgpid(jobs) != pid) &#123;<br>    sigsuspend(&amp;none_mask);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="sigchld-handler"><a href="#sigchld-handler" class="headerlink" title="sigchld_handler"></a>sigchld_handler</h1><p>这个函数和<code>SIGCHLD</code>信号绑定了，只要有子进程发出这个信号，父进程接收到之后就会使用这个函数去响应</p>
+<ol>
+<li>首先，父进程会使用waitpid函数去看看是否有子进程挂了或者暂停</li>
+<li>然后父进程会根据不同情况去处理<ol>
+<li>子进程正常结束：删除对应的job</li>
+<li>子进程被信号终止：删除对应的job，并打印信息</li>
+<li>子进程被暂停：找到对应的job，修改job的状态为暂停，并打印信息</li>
+</ol>
+</li>
+</ol>
+<p>注意点<br>3. <code>WNOHANG | WUNTRACED</code><br>    1. 第一个参数保证了，就算没有需要处理的子进程，当前进程也不会阻塞住不动<br>    2. 第二个参数保证了，会去响应被暂停的子进程<br>4. 备份errno<br>5. 在修改jobs之前需要阻塞所有信号，作用和之前说的一样，防止并发带来的问题</p>
+<blockquote>
+<p>由于我们不知道到底有多少个死亡信号或者暂停信号到达，所以必须要用while，而不是if</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">sigchld_handler</span><span class="hljs-params">(<span class="hljs-type">int</span> sig)</span> &#123;<br>  <span class="hljs-type">int</span> olderr = errno;<br>  <span class="hljs-type">pid_t</span> pid;<br>  <span class="hljs-type">int</span> state;<br>  <span class="hljs-type">sigset_t</span> all_mask, pre_mask;<br>  sigfillset(&amp;all_mask);<br>  <span class="hljs-comment">// 不断等待子进程，直到收到一个子进程停止的消息</span><br>  <span class="hljs-keyword">while</span> ((pid = waitpid(<span class="hljs-number">-1</span>, &amp;state, WNOHANG | WUNTRACED)) &gt; <span class="hljs-number">0</span>) &#123;<br>    <span class="hljs-comment">// 因为接下来需要操作jobs这个全局变量，先屏蔽所有的信号</span><br>    sigprocmask(SIG_SETMASK, &amp;all_mask, &amp;pre_mask);<br>    <span class="hljs-comment">// 如果是正常终止，则只需要删除对应的job</span><br>    <span class="hljs-keyword">if</span> (WIFEXITED(state)) &#123;<br>      deletejob(jobs, pid);<br>      <span class="hljs-comment">// 如果是被信号杀死，则还需要输出被哪个信号杀死</span><br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (WIFSIGNALED(state)) &#123;<br>      deletejob(jobs, pid);<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Job [%d] (%d) terminated by signal %d\n&quot;</span>, pid2jid(pid), pid,<br>             WTERMSIG(state));<br>      <span class="hljs-comment">// 如果是被信号暂停了，还需要修改对应job的状态</span><br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (WIFSTOPPED(state)) &#123;<br>      <span class="hljs-keyword">struct</span> <span class="hljs-type">job_t</span> *job = getjobpid(jobs, pid);<br>      job-&gt;state = ST;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Job [%d] (%d) stoped by signal %d\n&quot;</span>, pid2jid(pid), pid,<br>             WSTOPSIG(state));<br>    &#125;<br>    sigprocmask(SIG_SETMASK, &amp;pre_mask, <span class="hljs-literal">NULL</span>);<br>  &#125;<br><br>  errno = olderr;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="sigint-handler"><a href="#sigint-handler" class="headerlink" title="sigint_handler"></a>sigint_handler</h1><p>这个函数对应于ctrl c操作，强制杀死前台的进程<br>实现起来很简单：找到当前的前台进程，然后通过kill函数杀死它<br>注意保存和恢复error</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">sigint_handler</span><span class="hljs-params">(<span class="hljs-type">int</span> sig)</span> &#123;<br>  <span class="hljs-comment">// 前台进程只可能有一个，只要还存在前台进程，那就把这个前台进程给杀掉</span><br>  <span class="hljs-comment">// 感觉这里不加信号量也没问题</span><br>  <span class="hljs-type">int</span> olderr = errno;<br>  <span class="hljs-type">pid_t</span> pid;<br>  <span class="hljs-keyword">if</span> ((pid = fgpid(jobs)) != <span class="hljs-number">0</span>) &#123;<br>    kill(pid, sig);<br>  &#125;<br>  errno = olderr;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="sigtstp-handler"><a href="#sigtstp-handler" class="headerlink" title="sigtstp_handler"></a>sigtstp_handler</h1><p>这个函数对应于ctrl z函数，暂停前台进程</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> olderr = errno;<br><span class="hljs-type">pid_t</span> pid;<br><span class="hljs-keyword">if</span> ((pid = fgpid(jobs)) != <span class="hljs-number">0</span>) &#123;<br>  kill(pid, sig);<br>&#125;<br>errno = olderr;<br></code></pre></td></tr></table></figure>
+<h1 id="留坑"><a href="#留坑" class="headerlink" title="留坑"></a>留坑</h1><ol>
+<li>至今没有搞清楚tsh运行起来之后，到底是咋实现换行的</li>
+<li>总感觉这个做的迷迷糊糊的，没有很理解。接下来把书看一遍，希望能完全弄懂。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CSAPP/" class="category-chain-item">CSAPP</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CSAPP/" class="print-no-link">#CSAPP</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>csapp_lab5</div>
+      <div>http://example.com/2023/08/03/csapp-lab5/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Cao Dong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/06/csapp-lab6/" title="csapp_lab6">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">csapp_lab6</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/01/csapp-lab4/" title="csapp_lab4">
+                        <span class="hidden-mobile">csapp_lab4</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
