@@ -18,27 +18,28 @@
   <meta name="author" content="Cao Dong">
   <meta name="keywords" content="">
   
-    <meta name="description" content="background 在开始写代码之前，回顾一下xv6book的第五章会有帮助 你将使用E1000去处理网络通信 E1000会和qemu模拟的lan通信 在qemu模拟的lan中 xv6的地址是10.0.2.15 qemu模拟的计算机的地址是10.0.2.2     qemu会将所有的网络包都记录在packets.pcap中 文件kernel&#x2F;e1000.c包含了E1000的初始化代码，以及你需">
+    <meta name="description" content="Question 1 (50 pts)前置这里量化的思想时，如果输入很大，那么与它相乘的W就很重要（为什么不是输出很大，所以与它相乘的W就很重要？可能是因为输出很大的话，已经经过量化了，这一次已经来不及改了，要改也要等到下次训练） 所以对于每个W，计算了它的输入的每个特征的重要性，然后根据重要性，保留前百分之一的原始值，其他的都用量化值代替，示意图如下  之前的代码已经提供了一个input_fea">
 <meta property="og:type" content="article">
-<meta property="og:title" content="6.s081_lab11">
-<meta property="og:url" content="http://example.com/2023/08/31/6-s081-lab11/index.html">
+<meta property="og:title" content="6.5940_lab4">
+<meta property="og:url" content="http://example.com/2023/12/23/6-5940-lab4/index.html">
 <meta property="og:site_name" content="dcao&#39;s blog">
-<meta property="og:description" content="background 在开始写代码之前，回顾一下xv6book的第五章会有帮助 你将使用E1000去处理网络通信 E1000会和qemu模拟的lan通信 在qemu模拟的lan中 xv6的地址是10.0.2.15 qemu模拟的计算机的地址是10.0.2.2     qemu会将所有的网络包都记录在packets.pcap中 文件kernel&#x2F;e1000.c包含了E1000的初始化代码，以及你需">
+<meta property="og:description" content="Question 1 (50 pts)前置这里量化的思想时，如果输入很大，那么与它相乘的W就很重要（为什么不是输出很大，所以与它相乘的W就很重要？可能是因为输出很大的话，已经经过量化了，这一次已经来不及改了，要改也要等到下次训练） 所以对于每个W，计算了它的输入的每个特征的重要性，然后根据重要性，保留前百分之一的原始值，其他的都用量化值代替，示意图如下  之前的代码已经提供了一个input_fea">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png">
-<meta property="article:published_time" content="2023-08-30T20:28:08.000Z">
-<meta property="article:modified_time" content="2023-12-24T12:49:51.597Z">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231223191557541.png">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231223191551510.png">
+<meta property="article:published_time" content="2023-12-22T20:28:08.000Z">
+<meta property="article:modified_time" content="2023-12-24T13:06:03.459Z">
 <meta property="article:author" content="Cao Dong">
-<meta property="article:tag" content="Operating System">
-<meta property="article:tag" content="MIT6.S081">
+<meta property="article:tag" content="模型压缩&#x2F;加速">
+<meta property="article:tag" content="MIT6.5940">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png">
+<meta name="twitter:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231223191557541.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>6.s081_lab11 - dcao&#39;s blog</title>
+  <title>6.5940_lab4 - dcao&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +205,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="6.s081_lab11"></span>
+            <span id="subtitle" data-typed-text="6.5940_lab4"></span>
           
         </div>
 
@@ -220,8 +221,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-08-31 04:28" pubdate>
-          2023年8月31日 凌晨
+        <time datetime="2023-12-23 04:28" pubdate>
+          2023年12月23日 凌晨
         </time>
       </span>
     
@@ -232,7 +233,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          779 字
         
       </span>
     
@@ -243,7 +244,7 @@
         
         
         
-          11 分钟
+          7 分钟
         
       </span>
     
@@ -288,75 +289,66 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">6.s081_lab11</h1>
+            <h1 id="seo-header">6.5940_lab4</h1>
             
             
               <div class="markdown-body">
                 
-                <p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png" srcset="/img/loading.gif" lazyload alt="20231224204913"></p>
-<h1 id="background"><a href="#background" class="headerlink" title="background"></a>background</h1><ol>
-<li>在开始写代码之前，回顾一下xv6book的第五章会有帮助</li>
-<li>你将使用E1000去处理网络通信<ol>
-<li>E1000会和qemu模拟的lan通信</li>
-<li>在qemu模拟的lan中<ol>
-<li>xv6的地址是10.0.2.15</li>
-<li>qemu模拟的计算机的地址是10.0.2.2</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>qemu会将所有的网络包都记录在<code>packets.pcap</code>中</li>
-<li>文件<code>kernel/e1000.c</code>包含了E1000的初始化代码，以及你需要补充的接收和发送的空函数</li>
-<li><code>kernel/e1000_dev.h</code>包含了寄存器和标志位的定义</li>
-<li><code>kernel/net.c</code>和<code>kernel/net.h</code>包含了一个简单的内核栈去实现IP,UDP,ARP协议。这些文件也包含了一个灵活的数据结构去持有packet，叫作mbuf</li>
-</ol>
-<h1 id="your-job"><a href="#your-job" class="headerlink" title="your job"></a>your job</h1><ol>
-<li>完成<code>kernel/e1000.c</code>中的<code>e1000_transmit()</code>和<code>e1000_recv()</code></li>
-</ol>
-<p>简单捋一下实验的思路</p>
+                <h1 id="Question-1-50-pts"><a href="#Question-1-50-pts" class="headerlink" title="Question 1 (50 pts)"></a><strong>Question 1 (50 pts)</strong></h1><h2 id="前置"><a href="#前置" class="headerlink" title="前置"></a>前置</h2><p>这里量化的思想时，如果输入很大，那么与它相乘的W就很重要（为什么不是输出很大，所以与它相乘的W就很重要？可能是因为输出很大的话，已经经过量化了，这一次已经来不及改了，要改也要等到下次训练）</p>
+<p>所以对于每个W，计算了它的输入的每个特征的重要性，然后根据重要性，保留前百分之一的原始值，其他的都用量化值代替，示意图如下</p>
+<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231223191557541.png" srcset="/img/loading.gif" lazyload alt="image-20231223191557541"></p>
+<p>之前的代码已经提供了一个<code>input_feat</code>，这是一个字典，键为模块的name，值为模块的输入对应的属性，<code>input_feat[i][j][k]</code>代表</p>
 <ol>
-<li>首先，我们要修改的是设备驱动，也就是内核层面的代码，它会和硬件设备协同完成数据包的发送和接受</li>
-<li>发送数据包时<ol>
-<li>内核只需要将已经准备好的mbuf放到一个缓冲数组中，就完事了。这就是缓冲数组的优点，我往里面一扔就行了</li>
-<li>网卡中应该也有固定的程序，它会自己讲缓冲数组的数据包给发送出去</li>
-<li>我们只需要完成1中的任务，网卡那边不需要我们管</li>
+<li>第i个模块</li>
+<li>第j个输入</li>
+<li>第k个特征</li>
 </ol>
-</li>
-<li>接受数据包时<ol>
-<li>当网卡接收了数据时，它会将它存入另一个缓冲数组，存好之后它们通过一个中断，告诉内核来收数据了</li>
-<li>内核只需要将这个缓冲数组中已经到达的数据包传递给上层应用即可</li>
-</ol>
-</li>
-</ol>
-<p>以上就是基本的交互框架，但是因为设备驱动是内核，是纯软件，而网卡设备是硬件，所以双方的交互就有点麻烦。这里通过了一个很神奇的操作，就是寄存器映射，将硬件的寄存器给映射到了内核的地址空间中，我们访问内核的某个地址，就是在访问硬件的寄存器，这一下子就打通了内核和硬件之间的桥梁</p>
-<p>在<code>e1000_init</code>中，就将寄存器映射的起始地址赋值给了<code>regs</code>，并且将各种信息和地址都存放到寄存器中，比如数组<code>tx_ring</code>的地址就放到了<code>regs[E1000_TDBAL] = (uint64)tx_ring;</code></p>
-<p>至此，准备工作就做完了，我们现在就需要增加内核代码，使其能够和网卡配合，完成数据报的发送和接受</p>
-<h2 id="hints：e1000-transmit"><a href="#hints：e1000-transmit" class="headerlink" title="hints：e1000_transmit"></a>hints：e1000_transmit</h2><p>这个lab很有意思，它的hints基本就是给了你所有的伪代码，你一个一个去实现就行了</p>
-<ol>
-<li>首先，让我们通过<code>E1000_TDT</code>为索引去regs取出当前的index，其中regs就是一个<code>uint</code>类型的数组的头指针</li>
-<li>判断这个index指向的buf的状态，通过这个index去<code>tx_ring</code>中取出des，状态就存于des里的status中。这里要和一个宏E1000_TXD_STAT_DD相与进行判断</li>
-<li>如果这个buf还存着之前的值，将它通过<code>mbuffree</code>给free掉</li>
-<li>按提示修改des的各种参数，并且当前buf修改为传入的参数m即可。其中des的cmd参数没有给出提示，估计是想让我们自己查手册，我直接抄了大佬的E1000_TXD_CMD_EOP | E1000_TXD_CMD_RS</li>
-<li>最后，更新寄存器的值（空闲buf的指针，也就是第1步取出来东西的那个寄存器）</li>
-</ol>
-<p>这里有个注意点就是，需要在函数首尾加锁。因为同一时刻，可能有多个进程想要通过网卡发送数据，这就形成了竞争的问题</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">e1000_transmit</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> mbuf *m)</span> &#123;<br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// Your code here.</span><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// the mbuf contains an ethernet frame; program it into</span><br>    <span class="hljs-comment">// the TX descriptor ring so that the e1000 sends it. Stash</span><br>    <span class="hljs-comment">// a pointer so that it can be freed after sending.</span><br>    <span class="hljs-comment">//</span><br>    acquire(&amp;e1000_lock);<br><br>    uint32 index = regs[E1000_TDT];<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tx_desc</span> *<span class="hljs-title">des</span> =</span> &amp;tx_ring[index];<br><br>    <span class="hljs-keyword">if</span> (!(des-&gt;status &amp; E1000_TXD_STAT_DD)) &#123;<br>        release(&amp;e1000_lock);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (tx_mbufs[index]) &#123;<br>        mbuffree(tx_mbufs[index]);<br>    &#125;<br><br>    des-&gt;addr = (uint64)m-&gt;head;<br>    des-&gt;length = m-&gt;len;<br>    des-&gt;cmd = E1000_TXD_CMD_EOP | E1000_TXD_CMD_RS;<br>    tx_mbufs[index] = m;<br><br>    regs[E1000_TDT] = (regs[E1000_TDT] + <span class="hljs-number">1</span>) % TX_RING_SIZE;<br><br>    release(&amp;e1000_lock);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>因此若直接对<code>input_feat[i]</code>求和，就会得到一个长度为k的一维列表，代表了每个特征的重要性</p>
+<h2 id="Question-1-1-20-pts"><a href="#Question-1-1-20-pts" class="headerlink" title="Question 1.1 (20 pts)"></a>Question 1.1 (20 pts)</h2><p>现在已经得到了输入的每个特征的重要性了，根据torch提供的topk可以求出前百分之一的下标，然后根据下标修改矩阵，然后在量化之后再恢复即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">outlier_indices = torch.topk(importance,k=<span class="hljs-built_in">int</span>(<span class="hljs-number">0.01</span>*<span class="hljs-built_in">len</span>(importance)))[<span class="hljs-number">1</span>]<br></code></pre></td></tr></table></figure>
 
-<h2 id="hints：e1000-recv"><a href="#hints：e1000-recv" class="headerlink" title="hints：e1000_recv"></a>hints：e1000_recv</h2><ol>
-<li>首先通过寄存器中<code>E1000_RDT</code>的值+1对RX_RING_SIZE取模获取待接收数据的索引</li>
-<li>判断这个索引指向的buf的状态是否是待接收</li>
-<li>如果是待接收，修改m-&gt;len并且通过<code>net_rx</code>将这个buf传递给上层</li>
-<li>通过mbufalloc在这个索引处再次新建一个buf，并且将这个buf的des的data指针指向这个buf的head，然后将状态设置为0</li>
-<li>最后将这个索引的寄存器的值+1,</li>
-</ol>
-<p>这里有两个注意点</p>
-<ol>
-<li>不需要加锁，因为这里给出了提示。如果这个函数没有运行完，那么不会产生另一个中断</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">e1000_intr</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-comment">// tell the e1000 we&#x27;ve seen this interrupt;</span><br>    <span class="hljs-comment">// without this the e1000 won&#x27;t raise any</span><br>    <span class="hljs-comment">// further interrupts.</span><br>    regs[E1000_ICR] = <span class="hljs-number">0xffffffff</span>;<br><br>    e1000_recv();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里有个问题就是为什么是修改矩阵的列？</p>
+<p><code>outlier = m.weight.data[:, outlier_indices].clone()</code></p>
+<p>查看pytorch对linear的实现后才发现，它的实现很骚气</p>
+<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231223191551510.png" srcset="/img/loading.gif" lazyload alt="image-20231223191551510"></p>
+<h2 id="Question-1-2-15-pts"><a href="#Question-1-2-15-pts" class="headerlink" title="Question 1.2 (15 pts)"></a>Question 1.2 (15 pts)</h2><p>随机生成百分之一个数的下标和之前的方法对比</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">outlier_mask = torch.randint(<span class="hljs-number">0</span>, length, (length//<span class="hljs-number">100</span>,), dtype=torch.int32)<br></code></pre></td></tr></table></figure>
 
-<ol start="2">
-<li>需要使用while循环，把能读的数据包都读出来。我猜是因为一次中断不一定代表只有一个数据包到了，甚至在处理中断的过程中，还会有数据包到。如果每次中断只读一个，会导致丢很多包</li>
+<h2 id="Question-1-3-15-pts"><a href="#Question-1-3-15-pts" class="headerlink" title="Question 1.3 (15 pts)"></a>Question 1.3 (15 pts)</h2><p>输入越重要，说明对应的矩阵也重要，所以尽量不要损失精度</p>
+<h1 id="Question-2-50-pts"><a href="#Question-2-50-pts" class="headerlink" title="Question 2 (50 pts)"></a><strong>Question 2 (50 pts)</strong></h1><h2 id="Question-2-1-20-pts"><a href="#Question-2-1-20-pts" class="headerlink" title="Question 2.1 (20 pts)"></a>Question 2.1 (20 pts)</h2><p>代码和之前的一样</p>
+<ol>
+<li>先求出重要的矩阵参数</li>
+<li>将重要的矩阵参数先扩大scalar倍</li>
+<li>量化</li>
+<li>恢复重要的矩阵参数</li>
+</ol>
+<h2 id="Question-2-2-15-pts"><a href="#Question-2-2-15-pts" class="headerlink" title="Question 2.2 (15 pts)"></a>Question 2.2 (15 pts)</h2><p>1：121.90</p>
+<p>2：18.93</p>
+<p>4：21.26</p>
+<p>之前之所以会下降，是因为量化后策略生效了</p>
+<p>之后会上升，是因为提升的幅度太大，导致最大值超过了原来的最大值，从而增加了误差</p>
+<h2 id="Question-2-3-15-pts"><a href="#Question-2-3-15-pts" class="headerlink" title="Question 2.3 (15 pts)"></a>Question 2.3 (15 pts)</h2><p>这一部分关键在这个函数，这个函数的作用是尝试找出最合适的scalar值，就是for循环枚举可能的情况，找出一个最好的</p>
+<ol>
+<li>第一个参数为模块</li>
+<li>第二个参数是要拉伸的矩阵（KQV）</li>
+<li>第三个参数是输入</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">_search_module_scale</span>(<span class="hljs-params">block, linears2scale: <span class="hljs-built_in">list</span>, x, kwargs=&#123;&#125;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>但是要写代码的地方没太大难度，按照提示来</p>
+<p>首先是初始化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">best_error = torch.inf<br>best_ratio = -<span class="hljs-number">1</span><br>best_scales = -<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<p>然后是按照公式计算scalar</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">scales = torch.clamp(s_x,<span class="hljs-number">1e-5</span>)**ratio<br></code></pre></td></tr></table></figure>
+
+<p>最后是量化之后恢复重要的参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">fc.weight.div_(scales)<br></code></pre></td></tr></table></figure>
+
+<p>这一大段代码的意思应该是</p>
+<ol>
+<li>先是为每个模块找到了一个最优的scalar</li>
+<li>然后好像还使用了另一种优化的方法，即将前面除以一个数，后面的乘上一个数，这样可以避免出现分布不均匀的情况，并且激活还不会改变。而在这里，直接将之前求得的scalar作为这个参数</li>
 </ol>
 
                 
@@ -376,12 +368,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Operating-System/" class="category-chain-item">Operating System</a>
+  <a href="/categories/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9-%E5%8A%A0%E9%80%9F/" class="category-chain-item">模型压缩/加速</a>
   
   
     <span>></span>
     
-  <a href="/categories/Operating-System/MIT6-S081/" class="category-chain-item">MIT6.S081</a>
+  <a href="/categories/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9-%E5%8A%A0%E9%80%9F/MIT6-5940/" class="category-chain-item">MIT6.5940</a>
   
   
 
@@ -398,9 +390,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Operating-System/" class="print-no-link">#Operating System</a>
+        <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9-%E5%8A%A0%E9%80%9F/" class="print-no-link">#模型压缩/加速</a>
       
-        <a href="/tags/MIT6-S081/" class="print-no-link">#MIT6.S081</a>
+        <a href="/tags/MIT6-5940/" class="print-no-link">#MIT6.5940</a>
       
     </div>
   
@@ -412,8 +404,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>6.s081_lab11</div>
-      <div>http://example.com/2023/08/31/6-s081-lab11/</div>
+      <div>6.5940_lab4</div>
+      <div>http://example.com/2023/12/23/6-5940-lab4/</div>
     </div>
     <div class="license-meta">
       
@@ -425,7 +417,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年8月31日</div>
+          <div>2023年12月23日</div>
         </div>
       
       
@@ -457,9 +449,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/10/25/cmu10414-lab0/" title="cmu10414_lab0">
+                      <a href="/2023/12/25/6-5940-lab5/" title="6.5940_lab5">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">cmu10414_lab0</span>
+                        <span class="hidden-mobile">6.5940_lab5</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -467,8 +459,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/08/30/6-s081-lab10/" title="6.s081_lab10">
-                        <span class="hidden-mobile">6.s081_lab10</span>
+                      <a href="/2023/12/21/lock-free-queue/" title="网络程序设计_课程项目">
+                        <span class="hidden-mobile">网络程序设计_课程项目</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -18,27 +18,30 @@
   <meta name="author" content="Cao Dong">
   <meta name="keywords" content="">
   
-    <meta name="description" content="background 在开始写代码之前，回顾一下xv6book的第五章会有帮助 你将使用E1000去处理网络通信 E1000会和qemu模拟的lan通信 在qemu模拟的lan中 xv6的地址是10.0.2.15 qemu模拟的计算机的地址是10.0.2.2     qemu会将所有的网络包都记录在packets.pcap中 文件kernel&#x2F;e1000.c包含了E1000的初始化代码，以及你需">
+    <meta name="description" content="已定义的类和函数 123456789101112131415161718# 模型相关# 模型的定义class VGG(nn.Module)# 模型训练函数def train(  model: nn.Module,  dataloader: DataLoader,  criterion: nn.Module,  optimizer: Optimizer,  scheduler: LambdaLR,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="6.s081_lab11">
-<meta property="og:url" content="http://example.com/2023/08/31/6-s081-lab11/index.html">
+<meta property="og:title" content="6.5940_lab1">
+<meta property="og:url" content="http://example.com/2023/11/24/6-5940-lab1/index.html">
 <meta property="og:site_name" content="dcao&#39;s blog">
-<meta property="og:description" content="background 在开始写代码之前，回顾一下xv6book的第五章会有帮助 你将使用E1000去处理网络通信 E1000会和qemu模拟的lan通信 在qemu模拟的lan中 xv6的地址是10.0.2.15 qemu模拟的计算机的地址是10.0.2.2     qemu会将所有的网络包都记录在packets.pcap中 文件kernel&#x2F;e1000.c包含了E1000的初始化代码，以及你需">
+<meta property="og:description" content="已定义的类和函数 123456789101112131415161718# 模型相关# 模型的定义class VGG(nn.Module)# 模型训练函数def train(  model: nn.Module,  dataloader: DataLoader,  criterion: nn.Module,  optimizer: Optimizer,  scheduler: LambdaLR,">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png">
-<meta property="article:published_time" content="2023-08-30T20:28:08.000Z">
-<meta property="article:modified_time" content="2023-12-24T12:49:51.597Z">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231203143614877.png">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231203153632677.png">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231203153659267.png">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231203172836708.png">
+<meta property="article:published_time" content="2023-11-23T20:28:08.000Z">
+<meta property="article:modified_time" content="2023-12-24T13:02:52.442Z">
 <meta property="article:author" content="Cao Dong">
-<meta property="article:tag" content="Operating System">
-<meta property="article:tag" content="MIT6.S081">
+<meta property="article:tag" content="模型压缩&#x2F;加速">
+<meta property="article:tag" content="MIT6.5940">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png">
+<meta name="twitter:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231203143614877.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>6.s081_lab11 - dcao&#39;s blog</title>
+  <title>6.5940_lab1 - dcao&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +207,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="6.s081_lab11"></span>
+            <span id="subtitle" data-typed-text="6.5940_lab1"></span>
           
         </div>
 
@@ -220,8 +223,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-08-31 04:28" pubdate>
-          2023年8月31日 凌晨
+        <time datetime="2023-11-24 04:28" pubdate>
+          2023年11月24日 凌晨
         </time>
       </span>
     
@@ -232,7 +235,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          1k 字
         
       </span>
     
@@ -243,7 +246,7 @@
         
         
         
-          11 分钟
+          9 分钟
         
       </span>
     
@@ -288,76 +291,74 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">6.s081_lab11</h1>
+            <h1 id="seo-header">6.5940_lab1</h1>
             
             
               <div class="markdown-body">
                 
-                <p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png" srcset="/img/loading.gif" lazyload alt="20231224204913"></p>
-<h1 id="background"><a href="#background" class="headerlink" title="background"></a>background</h1><ol>
-<li>在开始写代码之前，回顾一下xv6book的第五章会有帮助</li>
-<li>你将使用E1000去处理网络通信<ol>
-<li>E1000会和qemu模拟的lan通信</li>
-<li>在qemu模拟的lan中<ol>
-<li>xv6的地址是10.0.2.15</li>
-<li>qemu模拟的计算机的地址是10.0.2.2</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>qemu会将所有的网络包都记录在<code>packets.pcap</code>中</li>
-<li>文件<code>kernel/e1000.c</code>包含了E1000的初始化代码，以及你需要补充的接收和发送的空函数</li>
-<li><code>kernel/e1000_dev.h</code>包含了寄存器和标志位的定义</li>
-<li><code>kernel/net.c</code>和<code>kernel/net.h</code>包含了一个简单的内核栈去实现IP,UDP,ARP协议。这些文件也包含了一个灵活的数据结构去持有packet，叫作mbuf</li>
-</ol>
-<h1 id="your-job"><a href="#your-job" class="headerlink" title="your job"></a>your job</h1><ol>
-<li>完成<code>kernel/e1000.c</code>中的<code>e1000_transmit()</code>和<code>e1000_recv()</code></li>
-</ol>
-<p>简单捋一下实验的思路</p>
-<ol>
-<li>首先，我们要修改的是设备驱动，也就是内核层面的代码，它会和硬件设备协同完成数据包的发送和接受</li>
-<li>发送数据包时<ol>
-<li>内核只需要将已经准备好的mbuf放到一个缓冲数组中，就完事了。这就是缓冲数组的优点，我往里面一扔就行了</li>
-<li>网卡中应该也有固定的程序，它会自己讲缓冲数组的数据包给发送出去</li>
-<li>我们只需要完成1中的任务，网卡那边不需要我们管</li>
-</ol>
-</li>
-<li>接受数据包时<ol>
-<li>当网卡接收了数据时，它会将它存入另一个缓冲数组，存好之后它们通过一个中断，告诉内核来收数据了</li>
-<li>内核只需要将这个缓冲数组中已经到达的数据包传递给上层应用即可</li>
-</ol>
-</li>
-</ol>
-<p>以上就是基本的交互框架，但是因为设备驱动是内核，是纯软件，而网卡设备是硬件，所以双方的交互就有点麻烦。这里通过了一个很神奇的操作，就是寄存器映射，将硬件的寄存器给映射到了内核的地址空间中，我们访问内核的某个地址，就是在访问硬件的寄存器，这一下子就打通了内核和硬件之间的桥梁</p>
-<p>在<code>e1000_init</code>中，就将寄存器映射的起始地址赋值给了<code>regs</code>，并且将各种信息和地址都存放到寄存器中，比如数组<code>tx_ring</code>的地址就放到了<code>regs[E1000_TDBAL] = (uint64)tx_ring;</code></p>
-<p>至此，准备工作就做完了，我们现在就需要增加内核代码，使其能够和网卡配合，完成数据报的发送和接受</p>
-<h2 id="hints：e1000-transmit"><a href="#hints：e1000-transmit" class="headerlink" title="hints：e1000_transmit"></a>hints：e1000_transmit</h2><p>这个lab很有意思，它的hints基本就是给了你所有的伪代码，你一个一个去实现就行了</p>
-<ol>
-<li>首先，让我们通过<code>E1000_TDT</code>为索引去regs取出当前的index，其中regs就是一个<code>uint</code>类型的数组的头指针</li>
-<li>判断这个index指向的buf的状态，通过这个index去<code>tx_ring</code>中取出des，状态就存于des里的status中。这里要和一个宏E1000_TXD_STAT_DD相与进行判断</li>
-<li>如果这个buf还存着之前的值，将它通过<code>mbuffree</code>给free掉</li>
-<li>按提示修改des的各种参数，并且当前buf修改为传入的参数m即可。其中des的cmd参数没有给出提示，估计是想让我们自己查手册，我直接抄了大佬的E1000_TXD_CMD_EOP | E1000_TXD_CMD_RS</li>
-<li>最后，更新寄存器的值（空闲buf的指针，也就是第1步取出来东西的那个寄存器）</li>
-</ol>
-<p>这里有个注意点就是，需要在函数首尾加锁。因为同一时刻，可能有多个进程想要通过网卡发送数据，这就形成了竞争的问题</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">e1000_transmit</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> mbuf *m)</span> &#123;<br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// Your code here.</span><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// the mbuf contains an ethernet frame; program it into</span><br>    <span class="hljs-comment">// the TX descriptor ring so that the e1000 sends it. Stash</span><br>    <span class="hljs-comment">// a pointer so that it can be freed after sending.</span><br>    <span class="hljs-comment">//</span><br>    acquire(&amp;e1000_lock);<br><br>    uint32 index = regs[E1000_TDT];<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tx_desc</span> *<span class="hljs-title">des</span> =</span> &amp;tx_ring[index];<br><br>    <span class="hljs-keyword">if</span> (!(des-&gt;status &amp; E1000_TXD_STAT_DD)) &#123;<br>        release(&amp;e1000_lock);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (tx_mbufs[index]) &#123;<br>        mbuffree(tx_mbufs[index]);<br>    &#125;<br><br>    des-&gt;addr = (uint64)m-&gt;head;<br>    des-&gt;length = m-&gt;len;<br>    des-&gt;cmd = E1000_TXD_CMD_EOP | E1000_TXD_CMD_RS;<br>    tx_mbufs[index] = m;<br><br>    regs[E1000_TDT] = (regs[E1000_TDT] + <span class="hljs-number">1</span>) % TX_RING_SIZE;<br><br>    release(&amp;e1000_lock);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+                <p>已定义的类和函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 模型相关</span><br><span class="hljs-comment"># 模型的定义</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">VGG</span>(nn.Module)<br><span class="hljs-comment"># 模型训练函数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params"></span><br><span class="hljs-params">  model: nn.Module,</span><br><span class="hljs-params">  dataloader: DataLoader,</span><br><span class="hljs-params">  criterion: nn.Module,</span><br><span class="hljs-params">  optimizer: Optimizer,</span><br><span class="hljs-params">  scheduler: LambdaLR,</span><br><span class="hljs-params">  callbacks = <span class="hljs-literal">None</span></span><br><span class="hljs-params"></span>) -&gt; <span class="hljs-literal">None</span><br><span class="hljs-comment"># 模型评估函数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">evaluate</span>(<span class="hljs-params"></span><br><span class="hljs-params">  model: nn.Module,</span><br><span class="hljs-params">  dataloader: DataLoader,</span><br><span class="hljs-params">  verbose=<span class="hljs-literal">True</span>,</span><br><span class="hljs-params"></span>) -&gt; <span class="hljs-built_in">float</span><br></code></pre></td></tr></table></figure>
 
-<h2 id="hints：e1000-recv"><a href="#hints：e1000-recv" class="headerlink" title="hints：e1000_recv"></a>hints：e1000_recv</h2><ol>
-<li>首先通过寄存器中<code>E1000_RDT</code>的值+1对RX_RING_SIZE取模获取待接收数据的索引</li>
-<li>判断这个索引指向的buf的状态是否是待接收</li>
-<li>如果是待接收，修改m-&gt;len并且通过<code>net_rx</code>将这个buf传递给上层</li>
-<li>通过mbufalloc在这个索引处再次新建一个buf，并且将这个buf的des的data指针指向这个buf的head，然后将状态设置为0</li>
-<li>最后将这个索引的寄存器的值+1,</li>
-</ol>
-<p>这里有两个注意点</p>
-<ol>
-<li>不需要加锁，因为这里给出了提示。如果这个函数没有运行完，那么不会产生另一个中断</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">e1000_intr</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-comment">// tell the e1000 we&#x27;ve seen this interrupt;</span><br>    <span class="hljs-comment">// without this the e1000 won&#x27;t raise any</span><br>    <span class="hljs-comment">// further interrupts.</span><br>    regs[E1000_ICR] = <span class="hljs-number">0xffffffff</span>;<br><br>    e1000_recv();<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 模型指标相关</span><br><span class="hljs-comment"># 模型的mac（乘法和加法）</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_model_macs</span>(<span class="hljs-params">model, inputs</span>)<br><span class="hljs-comment"># 单个tensor的稀疏性</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_sparsity</span>(<span class="hljs-params">tensor: torch.Tensor</span>)<br><span class="hljs-comment"># 模型的稀疏性</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_model_sparsity</span>(<span class="hljs-params">model: nn.Module</span>)<br><span class="hljs-comment"># 模型的参数数量</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_num_parameters</span>(<span class="hljs-params">model: nn.Module, </span><br><span class="hljs-params">            count_nonzero_only=<span class="hljs-literal">False</span></span>)<br><span class="hljs-comment"># 模型的size</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_model_size</span>(<span class="hljs-params">model: nn.Module, </span><br><span class="hljs-params">       data_width=<span class="hljs-number">32</span>, count_nonzero_only=<span class="hljs-literal">False</span></span>)<br></code></pre></td></tr></table></figure>
 
-<ol start="2">
-<li>需要使用while循环，把能读的数据包都读出来。我猜是因为一次中断不一定代表只有一个数据包到了，甚至在处理中断的过程中，还会有数据包到。如果每次中断只读一个，会导致丢很多包</li>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 测试细粒度剪枝的效果</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">test_fine_grained_prune</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="Fine-grained-Pruning"><a href="#Fine-grained-Pruning" class="headerlink" title="Fine-grained Pruning"></a>Fine-grained Pruning</h1><h2 id="Magnitude-based-Pruning"><a href="#Magnitude-based-Pruning" class="headerlink" title="Magnitude-based Pruning"></a>Magnitude-based Pruning</h2><ol>
+<li>得到稀疏率</li>
+<li>根据稀疏率找到最小的第k个值（threshold）</li>
+<li>将小于这个值的都置为0（通过一个mask矩阵完成）</li>
 </ol>
+<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231203143614877.png" srcset="/img/loading.gif" lazyload alt="image-20231203143614877"></p>
+<h3 id="Question-2-15-pts"><a href="#Question-2-15-pts" class="headerlink" title="Question 2 (15 pts)"></a>Question 2 (15 pts)</h3><p>照着hints翻译代码即可，需要注意的是</p>
+<ol>
+<li><code>kthvalue</code>函数是默认对指定dim或者最后一维操作的，因此对于二维tensor，需要先展平，再求第k小</li>
+<li><code>kthvalue</code>函数返回的是一个类，我们只需要这个类中的value</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">##################### YOUR CODE STARTS HERE #####################</span><br><span class="hljs-comment"># Step 1: calculate the #zeros (please use round())</span><br>num_zeros = <span class="hljs-built_in">round</span>(num_elements*sparsity)<br><span class="hljs-comment"># Step 2: calculate the importance of weight</span><br>importance = torch.<span class="hljs-built_in">abs</span>(tensor)<br><span class="hljs-comment"># Step 3: calculate the pruning threshold</span><br>threshold = torch.kthvalue(importance.view(-<span class="hljs-number">1</span>),num_zeros).values<br><span class="hljs-comment"># Step 4: get binary mask (1 for nonzeros, 0 for zeros)</span><br>mask = torch.gt(importance,threshold)<br><span class="hljs-comment">##################### YOUR CODE ENDS HERE #######################</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="Question-3-5-pts"><a href="#Question-3-5-pts" class="headerlink" title="Question 3 (5 pts)"></a>Question 3 (5 pts)</h3><p>留下十个非零的数，总共25个数，即稀疏率要达到15&#x2F;25，即0.6</p>
+<p>然后包装了一个类<code>FineGrainedPruner</code></p>
+<ol>
+<li>在<code>__init__</code>中调用了<code>prune</code>，将这个模型的所有全连接层和卷积层的MASK都得到</li>
+<li>以后每次调用<code>apply</code>，都直接用之前得到的MASK处理模型</li>
+</ol>
+<p>这样相当于就固定了MASK，每次直接用就行，不需要重新计算</p>
+<h2 id="Sensitivity-Scan"><a href="#Sensitivity-Scan" class="headerlink" title="Sensitivity Scan"></a>Sensitivity Scan</h2><p>稀疏度和剪枝后的准确率</p>
+<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231203153632677.png" srcset="/img/loading.gif" lazyload alt="image-20231203153632677"></p>
+<p>参数分布</p>
+<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231203153659267.png" srcset="/img/loading.gif" lazyload alt="image-20231203153659267"></p>
+<h3 id="Question-5-10-pts"><a href="#Question-5-10-pts" class="headerlink" title="Question 5 (10 pts)"></a>Question 5 (10 pts)</h3><p>25%的大小，微调之后达到%92.5的准确率，其中微调的代码已经写好了</p>
+<p>因此，在这里只需要调参，使得模型的大小位于%25以下。做法就是</p>
+<ol>
+<li>尽量调参数比较大的层</li>
+<li>尽量调靠后的层</li>
+<li>不要对着一个层拼命地薅</li>
+</ol>
+<p>通过这样调，让准确率降到了87.66%，但是在微调之后，回到了%92.5以上，因此有着百分之五的提升空间</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&#x27;backbone.conv3.weight&#x27;</span>: <span class="hljs-number">0.6</span>,<br><span class="hljs-string">&#x27;backbone.conv4.weight&#x27;</span>: <span class="hljs-number">0.7</span>,<br><span class="hljs-string">&#x27;backbone.conv5.weight&#x27;</span>: <span class="hljs-number">0.8</span>,<br><span class="hljs-string">&#x27;backbone.conv6.weight&#x27;</span>: <span class="hljs-number">0.8</span>,<br><span class="hljs-string">&#x27;backbone.conv7.weight&#x27;</span>: <span class="hljs-number">0.9</span>,<br></code></pre></td></tr></table></figure>
+
+<p>微调的代码就是重新训练了几轮</p>
+<h1 id="Channel-Pruning"><a href="#Channel-Pruning" class="headerlink" title="Channel Pruning"></a>Channel Pruning</h1><h2 id="Remove-Channel-Weights"><a href="#Remove-Channel-Weights" class="headerlink" title="Remove Channel Weights"></a>Remove Channel Weights</h2><h3 id="Question-6-10-pts"><a href="#Question-6-10-pts" class="headerlink" title="Question 6 (10 pts)"></a>Question 6 (10 pts)</h3><h4 id="简单剪枝（直接保留前若干个）"><a href="#简单剪枝（直接保留前若干个）" class="headerlink" title="简单剪枝（直接保留前若干个）"></a>简单剪枝（直接保留前若干个）</h4><p>在这里只需要将输出通道中的前new个保留即可</p>
+<p>第一步是在这个函数<code>get_num_channels_to_keep</code>中根据比例和现在的通道数计算保留下来的通道数，很简单，但是要注意对于乘法的结果要round，而不能用代码提供的int，大坑！</p>
+<p>第二步是添加一行代码，使得卷积前后的通道数匹配地上，即前一个卷积操作的输出通道，是后一个卷积操作的输入通道，而在pytorch中卷积核是以$c_{out},c_{int},h,w$排布的，因此只需要这一行代码即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">next_conv.weight.set_(next_conv.weight.detach()[:,:n_keep])<br></code></pre></td></tr></table></figure>
+
+<h4 id="Ranking-Channels-by-Importance"><a href="#Ranking-Channels-by-Importance" class="headerlink" title="Ranking Channels by Importance"></a>Ranking Channels by Importance</h4><p>这一步操作其实并不是直接对channel按importance排序后剪裁，而只是将现有的conv层都按管道的重要性排个序就行了</p>
+<p>首先在<code>get_input_channel_importance</code>得到某个conv层的输入管道的importance，只需要一行代码<code>importance = torch.norm(channel_weight)</code></p>
+<p>然后模仿着对pre_conv的处理加个代码即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">next_conv.weight.copy_(torch.index_select(<br>    next_conv.weight.detach(),<span class="hljs-number">1</span>,sort_idx<br>))<br></code></pre></td></tr></table></figure>
+
+<p>这里实验给的代码用了一个很骚的操作，对于每个conv</p>
+<ol>
+<li><p>先得到这个conv所有输入层的importance</p>
+</li>
+<li><p>对这个importance排序，但是不直接改变数组（这里是tensor的数组），而是得到一个index数组，index[i]记录着第i重要的（i越小越重要），得到这样的一个效果</p>
+<p> <img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231203172836708.png" srcset="/img/loading.gif" lazyload alt="image-20231203172836708"></p>
+</li>
+<li><p>然后根据这个index数组将原来的conv的参数重新排序后赋值</p>
+</li>
+</ol>
+<h3 id="Measure-acceleration-from-pruning"><a href="#Measure-acceleration-from-pruning" class="headerlink" title="Measure acceleration from pruning"></a>Measure acceleration from pruning</h3><p>相比于fine-grained的剪枝，基于channel的可以直接带来模型size的下降和计算速度的提升，因为实打实地减少了很多channel，节省了计算量</p>
 
                 
               </div>
@@ -376,12 +377,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Operating-System/" class="category-chain-item">Operating System</a>
+  <a href="/categories/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9-%E5%8A%A0%E9%80%9F/" class="category-chain-item">模型压缩/加速</a>
   
   
     <span>></span>
     
-  <a href="/categories/Operating-System/MIT6-S081/" class="category-chain-item">MIT6.S081</a>
+  <a href="/categories/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9-%E5%8A%A0%E9%80%9F/MIT6-5940/" class="category-chain-item">MIT6.5940</a>
   
   
 
@@ -398,9 +399,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Operating-System/" class="print-no-link">#Operating System</a>
+        <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9-%E5%8A%A0%E9%80%9F/" class="print-no-link">#模型压缩/加速</a>
       
-        <a href="/tags/MIT6-S081/" class="print-no-link">#MIT6.S081</a>
+        <a href="/tags/MIT6-5940/" class="print-no-link">#MIT6.5940</a>
       
     </div>
   
@@ -412,8 +413,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>6.s081_lab11</div>
-      <div>http://example.com/2023/08/31/6-s081-lab11/</div>
+      <div>6.5940_lab1</div>
+      <div>http://example.com/2023/11/24/6-5940-lab1/</div>
     </div>
     <div class="license-meta">
       
@@ -425,7 +426,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年8月31日</div>
+          <div>2023年11月24日</div>
         </div>
       
       
@@ -457,9 +458,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/10/25/cmu10414-lab0/" title="cmu10414_lab0">
+                      <a href="/2023/12/03/6-5940-lab2/" title="6.5940_lab2">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">cmu10414_lab0</span>
+                        <span class="hidden-mobile">6.5940_lab2</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -467,8 +468,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/08/30/6-s081-lab10/" title="6.s081_lab10">
-                        <span class="hidden-mobile">6.s081_lab10</span>
+                      <a href="/2023/11/20/cmu10414-lab4/" title="cmu10414_lab4">
+                        <span class="hidden-mobile">cmu10414_lab4</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

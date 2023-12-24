@@ -18,27 +18,25 @@
   <meta name="author" content="Cao Dong">
   <meta name="keywords" content="">
   
-    <meta name="description" content="background 在开始写代码之前，回顾一下xv6book的第五章会有帮助 你将使用E1000去处理网络通信 E1000会和qemu模拟的lan通信 在qemu模拟的lan中 xv6的地址是10.0.2.15 qemu模拟的计算机的地址是10.0.2.2     qemu会将所有的网络包都记录在packets.pcap中 文件kernel&#x2F;e1000.c包含了E1000的初始化代码，以及你需">
+    <meta name="description" content="Part 1. Predictors (3 Questions, 30 pts)首先在之前，就获得了一个ofa_network 123456ofa_network &#x3D; OFAMCUNets(    n_classes&#x3D;2,    bn_param&#x3D;(0.1, 1e-3),    ....,)ofa_network.load_state_dict() 在下面这个函数中展示了它的用法，说明ofa_ne">
 <meta property="og:type" content="article">
-<meta property="og:title" content="6.s081_lab11">
-<meta property="og:url" content="http://example.com/2023/08/31/6-s081-lab11/index.html">
+<meta property="og:title" content="6.5940_lab3">
+<meta property="og:url" content="http://example.com/2023/12/07/6-5940-lab3/index.html">
 <meta property="og:site_name" content="dcao&#39;s blog">
-<meta property="og:description" content="background 在开始写代码之前，回顾一下xv6book的第五章会有帮助 你将使用E1000去处理网络通信 E1000会和qemu模拟的lan通信 在qemu模拟的lan中 xv6的地址是10.0.2.15 qemu模拟的计算机的地址是10.0.2.2     qemu会将所有的网络包都记录在packets.pcap中 文件kernel&#x2F;e1000.c包含了E1000的初始化代码，以及你需">
+<meta property="og:description" content="Part 1. Predictors (3 Questions, 30 pts)首先在之前，就获得了一个ofa_network 123456ofa_network &#x3D; OFAMCUNets(    n_classes&#x3D;2,    bn_param&#x3D;(0.1, 1e-3),    ....,)ofa_network.load_state_dict() 在下面这个函数中展示了它的用法，说明ofa_ne">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png">
-<meta property="article:published_time" content="2023-08-30T20:28:08.000Z">
-<meta property="article:modified_time" content="2023-12-24T12:49:51.597Z">
+<meta property="article:published_time" content="2023-12-06T20:28:08.000Z">
+<meta property="article:modified_time" content="2023-12-24T13:05:13.098Z">
 <meta property="article:author" content="Cao Dong">
-<meta property="article:tag" content="Operating System">
-<meta property="article:tag" content="MIT6.S081">
+<meta property="article:tag" content="模型压缩&#x2F;加速">
+<meta property="article:tag" content="MIT6.5940">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>6.s081_lab11 - dcao&#39;s blog</title>
+  <title>6.5940_lab3 - dcao&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="6.s081_lab11"></span>
+            <span id="subtitle" data-typed-text="6.5940_lab3"></span>
           
         </div>
 
@@ -220,8 +218,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-08-31 04:28" pubdate>
-          2023年8月31日 凌晨
+        <time datetime="2023-12-07 04:28" pubdate>
+          2023年12月7日 凌晨
         </time>
       </span>
     
@@ -232,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          998 字
         
       </span>
     
@@ -243,7 +241,7 @@
         
         
         
-          11 分钟
+          9 分钟
         
       </span>
     
@@ -288,75 +286,78 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">6.s081_lab11</h1>
+            <h1 id="seo-header">6.5940_lab3</h1>
             
             
               <div class="markdown-body">
                 
-                <p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png" srcset="/img/loading.gif" lazyload alt="20231224204913"></p>
-<h1 id="background"><a href="#background" class="headerlink" title="background"></a>background</h1><ol>
-<li>在开始写代码之前，回顾一下xv6book的第五章会有帮助</li>
-<li>你将使用E1000去处理网络通信<ol>
-<li>E1000会和qemu模拟的lan通信</li>
-<li>在qemu模拟的lan中<ol>
-<li>xv6的地址是10.0.2.15</li>
-<li>qemu模拟的计算机的地址是10.0.2.2</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>qemu会将所有的网络包都记录在<code>packets.pcap</code>中</li>
-<li>文件<code>kernel/e1000.c</code>包含了E1000的初始化代码，以及你需要补充的接收和发送的空函数</li>
-<li><code>kernel/e1000_dev.h</code>包含了寄存器和标志位的定义</li>
-<li><code>kernel/net.c</code>和<code>kernel/net.h</code>包含了一个简单的内核栈去实现IP,UDP,ARP协议。这些文件也包含了一个灵活的数据结构去持有packet，叫作mbuf</li>
-</ol>
-<h1 id="your-job"><a href="#your-job" class="headerlink" title="your job"></a>your job</h1><ol>
-<li>完成<code>kernel/e1000.c</code>中的<code>e1000_transmit()</code>和<code>e1000_recv()</code></li>
-</ol>
-<p>简单捋一下实验的思路</p>
-<ol>
-<li>首先，我们要修改的是设备驱动，也就是内核层面的代码，它会和硬件设备协同完成数据包的发送和接受</li>
-<li>发送数据包时<ol>
-<li>内核只需要将已经准备好的mbuf放到一个缓冲数组中，就完事了。这就是缓冲数组的优点，我往里面一扔就行了</li>
-<li>网卡中应该也有固定的程序，它会自己讲缓冲数组的数据包给发送出去</li>
-<li>我们只需要完成1中的任务，网卡那边不需要我们管</li>
-</ol>
-</li>
-<li>接受数据包时<ol>
-<li>当网卡接收了数据时，它会将它存入另一个缓冲数组，存好之后它们通过一个中断，告诉内核来收数据了</li>
-<li>内核只需要将这个缓冲数组中已经到达的数据包传递给上层应用即可</li>
-</ol>
-</li>
-</ol>
-<p>以上就是基本的交互框架，但是因为设备驱动是内核，是纯软件，而网卡设备是硬件，所以双方的交互就有点麻烦。这里通过了一个很神奇的操作，就是寄存器映射，将硬件的寄存器给映射到了内核的地址空间中，我们访问内核的某个地址，就是在访问硬件的寄存器，这一下子就打通了内核和硬件之间的桥梁</p>
-<p>在<code>e1000_init</code>中，就将寄存器映射的起始地址赋值给了<code>regs</code>，并且将各种信息和地址都存放到寄存器中，比如数组<code>tx_ring</code>的地址就放到了<code>regs[E1000_TDBAL] = (uint64)tx_ring;</code></p>
-<p>至此，准备工作就做完了，我们现在就需要增加内核代码，使其能够和网卡配合，完成数据报的发送和接受</p>
-<h2 id="hints：e1000-transmit"><a href="#hints：e1000-transmit" class="headerlink" title="hints：e1000_transmit"></a>hints：e1000_transmit</h2><p>这个lab很有意思，它的hints基本就是给了你所有的伪代码，你一个一个去实现就行了</p>
-<ol>
-<li>首先，让我们通过<code>E1000_TDT</code>为索引去regs取出当前的index，其中regs就是一个<code>uint</code>类型的数组的头指针</li>
-<li>判断这个index指向的buf的状态，通过这个index去<code>tx_ring</code>中取出des，状态就存于des里的status中。这里要和一个宏E1000_TXD_STAT_DD相与进行判断</li>
-<li>如果这个buf还存着之前的值，将它通过<code>mbuffree</code>给free掉</li>
-<li>按提示修改des的各种参数，并且当前buf修改为传入的参数m即可。其中des的cmd参数没有给出提示，估计是想让我们自己查手册，我直接抄了大佬的E1000_TXD_CMD_EOP | E1000_TXD_CMD_RS</li>
-<li>最后，更新寄存器的值（空闲buf的指针，也就是第1步取出来东西的那个寄存器）</li>
-</ol>
-<p>这里有个注意点就是，需要在函数首尾加锁。因为同一时刻，可能有多个进程想要通过网卡发送数据，这就形成了竞争的问题</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">e1000_transmit</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> mbuf *m)</span> &#123;<br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// Your code here.</span><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// the mbuf contains an ethernet frame; program it into</span><br>    <span class="hljs-comment">// the TX descriptor ring so that the e1000 sends it. Stash</span><br>    <span class="hljs-comment">// a pointer so that it can be freed after sending.</span><br>    <span class="hljs-comment">//</span><br>    acquire(&amp;e1000_lock);<br><br>    uint32 index = regs[E1000_TDT];<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tx_desc</span> *<span class="hljs-title">des</span> =</span> &amp;tx_ring[index];<br><br>    <span class="hljs-keyword">if</span> (!(des-&gt;status &amp; E1000_TXD_STAT_DD)) &#123;<br>        release(&amp;e1000_lock);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (tx_mbufs[index]) &#123;<br>        mbuffree(tx_mbufs[index]);<br>    &#125;<br><br>    des-&gt;addr = (uint64)m-&gt;head;<br>    des-&gt;length = m-&gt;len;<br>    des-&gt;cmd = E1000_TXD_CMD_EOP | E1000_TXD_CMD_RS;<br>    tx_mbufs[index] = m;<br><br>    regs[E1000_TDT] = (regs[E1000_TDT] + <span class="hljs-number">1</span>) % TX_RING_SIZE;<br><br>    release(&amp;e1000_lock);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+                <h2 id="Part-1-Predictors-3-Questions-30-pts"><a href="#Part-1-Predictors-3-Questions-30-pts" class="headerlink" title="Part 1. Predictors (3 Questions, 30 pts)"></a>Part 1. Predictors (3 Questions, 30 pts)</h2><p>首先在之前，就获得了一个<code>ofa_network</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">ofa_network = OFAMCUNets(<br>    n_classes=<span class="hljs-number">2</span>,<br>    bn_param=(<span class="hljs-number">0.1</span>, <span class="hljs-number">1e-3</span>),<br>    ....,<br>)<br>ofa_network.load_state_dict()<br></code></pre></td></tr></table></figure>
+<p>在下面这个函数中展示了它的用法，说明ofa_network是一整个超网，cfg是config的缩写，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">evaluate_sub_network</span>(<span class="hljs-params"></span><br><span class="hljs-params">    ofa_network, cfg, image_size=<span class="hljs-literal">None</span></span>)<br></code></pre></td></tr></table></figure>
 
-<h2 id="hints：e1000-recv"><a href="#hints：e1000-recv" class="headerlink" title="hints：e1000_recv"></a>hints：e1000_recv</h2><ol>
-<li>首先通过寄存器中<code>E1000_RDT</code>的值+1对RX_RING_SIZE取模获取待接收数据的索引</li>
-<li>判断这个索引指向的buf的状态是否是待接收</li>
-<li>如果是待接收，修改m-&gt;len并且通过<code>net_rx</code>将这个buf传递给上层</li>
-<li>通过mbufalloc在这个索引处再次新建一个buf，并且将这个buf的des的data指针指向这个buf的head，然后将状态设置为0</li>
-<li>最后将这个索引的寄存器的值+1,</li>
-</ol>
-<p>这里有两个注意点</p>
-<ol>
-<li>不需要加锁，因为这里给出了提示。如果这个函数没有运行完，那么不会产生另一个中断</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">e1000_intr</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-comment">// tell the e1000 we&#x27;ve seen this interrupt;</span><br>    <span class="hljs-comment">// without this the e1000 won&#x27;t raise any</span><br>    <span class="hljs-comment">// further interrupts.</span><br>    regs[E1000_ICR] = <span class="hljs-number">0xffffffff</span>;<br><br>    e1000_recv();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过下面两个函数可以根据cfg获取子网，然后就可以衡量并测试子网的性能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">ofa_network.set_active_subnet(**cfg)<br>subnet = ofa_network.get_active_subnet().to(device)<br></code></pre></td></tr></table></figure>
 
-<ol start="2">
-<li>需要使用while循环，把能读的数据包都读出来。我猜是因为一次中断不一定代表只有一个数据包到了，甚至在处理中断的过程中，还会有数据包到。如果每次中断只读一个，会导致丢很多包</li>
+<p>其中cfg可以通过下面这个函数得到，第一个函数可以传入随机的，也可以传入max或者min</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">cfg = ofa_network.sample_active_subnet(<br>    sample_function=random.choice, <br>    image_size=image_size)<br></code></pre></td></tr></table></figure>
+
+<h3 id="Question-2-10-pts-Implement-the-efficiency-predictor"><a href="#Question-2-10-pts-Implement-the-efficiency-predictor" class="headerlink" title="Question 2 (10 pts): Implement the efficiency predictor"></a>Question 2 (10 pts): Implement the efficiency predictor</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">data_shape = (<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, spec[<span class="hljs-string">&quot;image_size&quot;</span>], spec[<span class="hljs-string">&quot;image_size&quot;</span>])<br>macs = count_net_flops(subnet, data_shape=data_shape)<br>peak_memory = count_peak_activation_size(<br>    subnet, data_shape=data_shape)<br></code></pre></td></tr></table></figure>
+
+<h3 id="Question-3-10-pts-Implement-the-accuracy-predictor"><a href="#Question-3-10-pts-Implement-the-accuracy-predictor" class="headerlink" title="Question 3 (10 pts): Implement the accuracy predictor"></a>Question 3 (10 pts): Implement the accuracy predictor</h3><p>下面这个类可以将一个model变成vector，比如这个model的某个卷积核的大小可以为[4,5,6]，那么[0,1,0]代表选择卷积核为5</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">arch_encoder = MCUNetArchEncoder()<br></code></pre></td></tr></table></figure>
+
+<p>准确率预测器是根据网络的结构预测准确率，在这里，它又三个linear组成</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> <span class="hljs-title function_ invoke__">range</span>(<span class="hljs-keyword">self</span>.n_layers):<br>    layers.<span class="hljs-title function_ invoke__">append</span>(<br>        nn.<span class="hljs-title function_ invoke__">ReLU</span>(<br>            nn.<span class="hljs-title function_ invoke__">Linear</span>(<br>                <span class="hljs-keyword">self</span>.hidden_size <span class="hljs-keyword">if</span> i!=<span class="hljs-number">0</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">self</span>.arch_encoder.n_dim,<br>                <span class="hljs-keyword">self</span>.hidden_size,bias=False<br>            )<br>        )<br>    )<br></code></pre></td></tr></table></figure>
+
+<h3 id="Question-4-10-pts-Complete-the-code-for-accuracy-predictor-training"><a href="#Question-4-10-pts-Complete-the-code-for-accuracy-predictor-training" class="headerlink" title="Question 4 (10 pts): Complete the code for accuracy predictor training."></a>Question 4 (10 pts): Complete the code for accuracy predictor training.</h3><p>得到了准确率预测器之后，还需要根据要应用的数据来调整一下，这里就是常规的pytorch训练的流程.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">pred = acc_predictor(data)<br>loss = criterion(pred,label)<br>optimizer.zero_grad()<br>loss.backward()<br>optimizer.step()<br></code></pre></td></tr></table></figure>
+
+<h2 id="Part-2-Neural-Architecture-Search-6-Questions-65-pts-10-bonus-pts"><a href="#Part-2-Neural-Architecture-Search-6-Questions-65-pts-10-bonus-pts" class="headerlink" title="Part 2. Neural Architecture Search (6 Questions, 65 pts + 10 bonus pts)"></a>Part 2. Neural Architecture Search (6 Questions, 65 pts + 10 bonus pts)</h2><h3 id="Question-5-5-pts-Complete-the-following-random-search-agent"><a href="#Question-5-5-pts-Complete-the-following-random-search-agent" class="headerlink" title="Question 5 (5 pts): Complete the following random search agent"></a>Question 5 (5 pts): Complete the following random search agent</h3><p><strong>RandomSearcher</strong>类</p>
+<ol>
+<li><code>__init__</code>传入准确率预测器和效率预测器</li>
+<li><code>random_valid_sample</code>传入限制，随机得到一个模型，如果能够满足精度，则返回模型</li>
+<li><code>run_search</code>传入限制和数量n，得到n个满足进度和效率的模型，选取最好的那个</li>
+</ol>
+<p>只需要补充</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">best_idx = torch.argmax(accs)<br></code></pre></td></tr></table></figure>
+
+<h3 id="Question-6-5-pts-Complete-the-following-function"><a href="#Question-6-5-pts-Complete-the-following-function" class="headerlink" title="Question 6 (5 pts): Complete the following function"></a>Question 6 (5 pts): Complete the following function</h3><p><strong>search_and_measure_acc</strong>函数</p>
+<ol>
+<li>传入随机查找的类，限制，以及其他参数</li>
+<li>根据以上参数得到一个随机得到的可以满足进度和效率限制的<strong>配置</strong></li>
+<li>根据这个配置从超网中取出对应的网络，验证是否正确</li>
+</ol>
+<p>具体的使用如下，通过<code>search_constraint = dict(millonMACs=millonMACs)</code>表明了设置限制，这里设置了macs</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust">nas_agent = <span class="hljs-title function_ invoke__">RandomSearcher</span>(<br>    efficiency_predictor, acc_predictor)<br>subnets_rs_macs = &#123;&#125;<br><span class="hljs-keyword">for</span> <span class="hljs-variable">millonMACs</span> <span class="hljs-keyword">in</span> [<span class="hljs-number">50</span>, <span class="hljs-number">100</span>]:<br>    search_constraint = <span class="hljs-title function_ invoke__">dict</span>(millonMACs=millonMACs)<br>    <span class="hljs-title function_ invoke__">print</span>(f<span class="hljs-string">&quot;Random search with constraint: MACs &lt;= &#123;millonMACs&#125;M&quot;</span>)<br>    subnets_rs_macs[millonMACs] = <span class="hljs-title function_ invoke__">search_and_measure_acc</span>(<br>        nas_agent, search_constraint, n_subnets=<span class="hljs-number">300</span>)<br></code></pre></td></tr></table></figure>
+
+<p>至此可以理一下随机搜索的思路</p>
+<ol>
+<li>首先可以有准确率和效率预测器，根据这两个先得到一个可能的满足要求的配置</li>
+<li>根据这个配置从超网中取真正的网络，并验证</li>
+</ol>
+<h3 id="Question7-20-pts-Complete-the-following-evolutionary-search-agent"><a href="#Question7-20-pts-Complete-the-following-evolutionary-search-agent" class="headerlink" title="Question7 (20 pts): Complete the following evolutionary search agent"></a>Question7 (20 pts): Complete the following evolutionary search agent</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">new_sample[key] = random.choice([sample1[key], sample2[key]])<br>new_sample[key][i] = random.choice(<br>    [sample1[key][i], sample2[key][i]])<br>population = <span class="hljs-built_in">sorted</span>(population, <br>    key=<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-number">0</span>], reverse=<span class="hljs-literal">True</span>)<br>population = population[:parents_size]<br><br></code></pre></td></tr></table></figure>
+
+<p>后面两个question属于炼丹调参的范畴，但还是有一些思路可以遵循</p>
+<ol>
+<li><code>resolution_mutate_prob</code>很重要，应该是因为增加了管道，提取的信息更加丰富</li>
+<li><code>population_size</code>越大越好，因为这个代表了种群的基本盘，越多的话越可能出好的模型</li>
+<li><code>parent_ratio</code>越大也越好，依然是因为变异的群体变多了</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个lab其实做的有点莫名其妙的，因为就是调用了已经写好了的<code>mcunet</code>，后面缕了一下思路</p>
+<ol>
+<li>发现所谓的搜索空间，就是先定好了一些超参数，比如卷积的通道数，卷积核的大小等等，然后提供了一些可选的值，通过这些参数的排列组合，有非常多种情况</li>
+<li>我们需要的是能满足精读和效率要求的组合，其中效率要求主要是macs和peak memory，也对应了衡量计算和存储两大部分（这两个不能完全代表latency，但有参考价值）</li>
+<li>为了更快地衡量进度，而不用重新推理一遍，建立了一个数据集，根据arch为键，acc为值。其中arch就是用vector的形式量化了model，具体来说，对于每个参数，可能有[a,b,c]三种取指，可以通过[0,1,0]表示取b</li>
+<li>最后有两种搜索的策略<ol>
+<li>随机搜索</li>
+<li>仿生物进化的搜索<ol>
+<li>变异</li>
+<li>融合</li>
+</ol>
+</li>
+</ol>
+</li>
 </ol>
 
                 
@@ -376,12 +377,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Operating-System/" class="category-chain-item">Operating System</a>
+  <a href="/categories/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9-%E5%8A%A0%E9%80%9F/" class="category-chain-item">模型压缩/加速</a>
   
   
     <span>></span>
     
-  <a href="/categories/Operating-System/MIT6-S081/" class="category-chain-item">MIT6.S081</a>
+  <a href="/categories/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9-%E5%8A%A0%E9%80%9F/MIT6-5940/" class="category-chain-item">MIT6.5940</a>
   
   
 
@@ -398,9 +399,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Operating-System/" class="print-no-link">#Operating System</a>
+        <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9-%E5%8A%A0%E9%80%9F/" class="print-no-link">#模型压缩/加速</a>
       
-        <a href="/tags/MIT6-S081/" class="print-no-link">#MIT6.S081</a>
+        <a href="/tags/MIT6-5940/" class="print-no-link">#MIT6.5940</a>
       
     </div>
   
@@ -412,8 +413,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>6.s081_lab11</div>
-      <div>http://example.com/2023/08/31/6-s081-lab11/</div>
+      <div>6.5940_lab3</div>
+      <div>http://example.com/2023/12/07/6-5940-lab3/</div>
     </div>
     <div class="license-meta">
       
@@ -425,7 +426,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年8月31日</div>
+          <div>2023年12月7日</div>
         </div>
       
       
@@ -457,9 +458,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/10/25/cmu10414-lab0/" title="cmu10414_lab0">
+                      <a href="/2023/12/21/lock-free-queue/" title="网络程序设计_课程项目">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">cmu10414_lab0</span>
+                        <span class="hidden-mobile">网络程序设计_课程项目</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -467,8 +468,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/08/30/6-s081-lab10/" title="6.s081_lab10">
-                        <span class="hidden-mobile">6.s081_lab10</span>
+                      <a href="/2023/12/03/6-5940-lab2/" title="6.5940_lab2">
+                        <span class="hidden-mobile">6.5940_lab2</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

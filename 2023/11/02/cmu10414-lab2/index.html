@@ -1,0 +1,838 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Cao Dong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Introduction to needle两个重要的问题  python&#x2F;needle&#x2F;autograd.py，定义了框架，包括但不限于以下部分 class Op class TensorOp(Op) class Value class Tensor(Value) compute_gradient_of_variables   python&#x2F;needle&#x2F;ops&#x2F;ops_mathematic.p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cmu10414_lab2">
+<meta property="og:url" content="http://example.com/2023/11/02/cmu10414-lab2/index.html">
+<meta property="og:site_name" content="dcao&#39;s blog">
+<meta property="og:description" content="Introduction to needle两个重要的问题  python&#x2F;needle&#x2F;autograd.py，定义了框架，包括但不限于以下部分 class Op class TensorOp(Op) class Value class Tensor(Value) compute_gradient_of_variables   python&#x2F;needle&#x2F;ops&#x2F;ops_mathematic.p">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024161041846.png">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024171353873.png">
+<meta property="article:published_time" content="2023-11-01T20:28:08.000Z">
+<meta property="article:modified_time" content="2023-12-24T12:58:15.722Z">
+<meta property="article:author" content="Cao Dong">
+<meta property="article:tag" content="深度学习框架">
+<meta property="article:tag" content="CMU10414">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024161041846.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>cmu10414_lab2 - dcao&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CaoDong</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/scenery/p1.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="cmu10414_lab2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Cao Dong
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-02 04:28" pubdate>
+          2023年11月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">cmu10414_lab2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Introduction-to-needle"><a href="#Introduction-to-needle" class="headerlink" title="Introduction to needle"></a>Introduction to <code>needle</code></h1><p>两个重要的问题</p>
+<ol>
+<li><code>python/needle/autograd.py</code>，定义了框架，包括但不限于以下部分<ol>
+<li>class Op</li>
+<li>class TensorOp(Op)</li>
+<li>class Value</li>
+<li>class Tensor(Value)</li>
+<li>compute_gradient_of_variables</li>
+</ol>
+</li>
+<li><code>python/needle/ops/ops_mathematic.py</code>，包含多种操作的实现</li>
+</ol>
+<p>推荐先熟悉以下类，其他的没那么重要</p>
+<ol>
+<li><p>Value</p>
+</li>
+<li><p>Op</p>
+<p> 关键在于两个函数</p>
+<p> compute()会计算输出</p>
+<p> gradient()会根据输出的梯度，求出输入的梯度（反向传播）</p>
+</li>
+<li><p>Tensor</p>
+</li>
+<li><p>TensorOp</p>
+</li>
+</ol>
+<h1 id="实现forward操作"><a href="#实现forward操作" class="headerlink" title="实现forward操作"></a>实现forward操作</h1><p>很多操作就是一行numpy函数解决，但是最后一个需要自己再处理一下逻辑</p>
+<p>在numpy中，转置维度必须将所有维度包括了，加入维度是5，那么输入的axes的长度一定是五，然后把要交换的两个维度交换位置，比如这里就是将2和4对应的维度交换，[0,1,4,3,2]</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">compute</span><span class="hljs-params">(self, a)</span>:</span><br><span class="hljs-function">    d =</span> a.ndim<br>    axis = [i <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(d)]<br>    x, y = (d - <span class="hljs-number">1</span>, d - <span class="hljs-number">2</span>) <span class="hljs-keyword">if</span> self.axes is None 						       <span class="hljs-built_in">else</span>(self.axes[<span class="hljs-number">0</span>], self.axes[<span class="hljs-number">1</span>])<br>    axis[x], axis[y] = axis[y], axis[x]<br>    <span class="hljs-keyword">return</span> array_api.<span class="hljs-built_in">transpose</span>(a, axes=axis)<br></code></pre></td></tr></table></figure>
+
+<h1 id="实现backward计算"><a href="#实现backward计算" class="headerlink" title="实现backward计算"></a>实现backward计算</h1><h2 id="power-scalar"><a href="#power-scalar" class="headerlink" title="power_scalar"></a>power_scalar</h2><p>$$<br>y&#x3D;x^a\<br>\frac{dy}{dx}&#x3D;ax^{a-1}<br>$$</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return out_grad * self.scalar * mul_scalar(node.inputs[<span class="hljs-number">0</span>], self.scalar - <span class="hljs-number">1</span>)</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="divide"><a href="#divide" class="headerlink" title="divide"></a>divide</h2><p>$$<br>y&#x3D;\frac{a}{b}\<br>\frac{dy}{da}&#x3D;\frac{1}{b}\<br>\frac{dy}{db}&#x3D;-\frac{a}{b^2}<br>$$</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    a_d =</span> <span class="hljs-built_in">divide</span>(out_grad, node.inputs[<span class="hljs-number">1</span>])<br>    b_d = <span class="hljs-built_in">negate</span>(<span class="hljs-built_in">multiply</span>(out_grad, <span class="hljs-built_in">divide</span>(<br>        node.inputs[<span class="hljs-number">0</span>], <span class="hljs-built_in">multiply</span>(node.inputs[<span class="hljs-number">1</span>], node.inputs[<span class="hljs-number">1</span>]))))<br>    <span class="hljs-keyword">return</span> a_d, b_d<br>    # END YOUR SOLUTION<br></code></pre></td></tr></table></figure>
+
+<h2 id="divide-scalar"><a href="#divide-scalar" class="headerlink" title="divide_scalar"></a>divide_scalar</h2><p>标量操作很简单</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return out_grad / self.scalar</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="matmul"><a href="#matmul" class="headerlink" title="matmul"></a>matmul</h2><p>这个操作就有点恶心了，特别是两个相乘的矩阵存在高纬（超过两维的情况）</p>
+<p>高维矩阵相乘，本质上是多个二维矩阵相乘，它们除了最后两个维度要能够相乘外，前面的维度必须完全相同，比如一个四维矩阵A[a,b,c,d]和一个三维矩阵[e,f,g]可以相乘的条件就是[c,d]和[f,g]要能够相乘，并且b要等于e</p>
+<p>而求导，也就是将前面维度全部求和，比如C&#x3D;AB，其中A的维度是[a,b,c,d]，B的维度是[d,e]，C的维度就是[a,b,c,e]</p>
+<ol>
+<li>现在损失对A求导的结果的形状肯定也是[a,b,c,d]，这个维度很容易通过C的梯度的形状[a,b,c,e]和B的形状[d,e]凑出来</li>
+<li>而损失函数对B求导的形状肯定是[d,e]，但是这个不能直接由C的梯度[a,b,c,e]和A的梯度[a,b,c,d]凑出来，因为多了前面两维[a,b]，将这两维给除去的方法，就是将对应位置给加起来，通过numpy.sum(0,1)就可以达到这个效果。（为什么相加之后结果就是B的导数，就和矩阵求导相关了，我也不会证明）</li>
+</ol>
+<p>最后，对一个高维矩阵，比如[a,b,c,d]进行转置，好像只会将它转为[a,b,d,c]</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    lhs, rhs =</span> node.inputs<br>    lgrad, rgrad = <span class="hljs-built_in">matmul</span>(out_grad, rhs.<span class="hljs-built_in">transpose</span>()), <span class="hljs-built_in">matmul</span>(<br>        lhs.<span class="hljs-built_in">transpose</span>(), out_grad)<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(lhs.shape) &lt; <span class="hljs-built_in">len</span>(lgrad.shape):<br>        lgrad = lgrad.<span class="hljs-built_in">sum</span>(<br>            <span class="hljs-built_in">tuple</span>([i <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(lgrad.shape) - <span class="hljs-built_in">len</span>(lhs.shape))]))<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(rhs.shape) &lt; <span class="hljs-built_in">len</span>(rgrad.shape):<br>        rgrad = rgrad.<span class="hljs-built_in">sum</span>(<br>            <span class="hljs-built_in">tuple</span>([i <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(rgrad.shape) - <span class="hljs-built_in">len</span>(rhs.shape))]))<br>    <span class="hljs-keyword">return</span> lgrad, rgrad<br></code></pre></td></tr></table></figure>
+
+<h2 id="reshape"><a href="#reshape" class="headerlink" title="reshape"></a>reshape</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return reshape(out_grad, node.inputs[<span class="hljs-number">0</span>].shape)</span><br><span class="hljs-function">    # END YOUR SOLUTION</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="negate"><a href="#negate" class="headerlink" title="negate"></a>negate</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return negate(out_grad)</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="transpose"><a href="#transpose" class="headerlink" title="transpose"></a>transpose</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return transpose(out_grad, self.t)</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="broadcast"><a href="#broadcast" class="headerlink" title="broadcast"></a>broadcast</h2><ol>
+<li>将变化的维度给找出来，比如原始数据是[3,5,1,4]，被广播成了[3,5,4,4]，那么要做的就是将第3维给找出来，也就是1-&gt;4的这一维，然后将这一维的梯度通过sum相加</li>
+<li>最后还要reshape成原来的样子</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    ori_shape =</span> node.inputs[<span class="hljs-number">0</span>].shape<br>    shrink_dims = [i <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(self.shape))]<br>    <span class="hljs-keyword">for</span> i, (ori, cur) in <span class="hljs-built_in">enumerate</span>(<span class="hljs-built_in">zip</span>(<span class="hljs-built_in">reversed</span>(ori_shape), <span class="hljs-built_in">reversed</span>(self.shape))):<br>        <span class="hljs-keyword">if</span> ori == cur:<br>            shrink_dims[<span class="hljs-built_in">len</span>(self.shape) - i - <span class="hljs-number">1</span>] = <span class="hljs-number">-1</span><br>    shrink_dims = <span class="hljs-built_in">tuple</span>(<span class="hljs-built_in">filter</span>(lambda x: x &gt;= <span class="hljs-number">0</span>, shrink_dims))<br>    <span class="hljs-keyword">return</span> out_grad.<span class="hljs-built_in">sum</span>(shrink_dims).<span class="hljs-built_in">reshape</span>(ori_shape)<br>    # END YOUR SOLUTION<br></code></pre></td></tr></table></figure>
+
+<h2 id="summation"><a href="#summation" class="headerlink" title="summation"></a>summation</h2><p>summation是对维度进行了压缩，那么在反向传播时，肯定要将其进行广播</p>
+<p>所以</p>
+<ol>
+<li>先找出哪些维度被压缩了</li>
+<li>reshape成被压缩的形状（之前通过sum操作，可能直接将维度给干没了，所以要reshape恢复维度，即使那个维度的长度是1）</li>
+<li>广播成输入的形状（为啥可以直接广播就是正确的梯度，和矩阵求导相关）</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    new_shape =</span> <span class="hljs-built_in">list</span>(node.inputs[<span class="hljs-number">0</span>].shape)<br>    axes = <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(new_shape)) <span class="hljs-keyword">if</span> self.axes is None <span class="hljs-keyword">else</span> self.axes<br>    <span class="hljs-keyword">for</span> axis in axes:<br>        new_shape[axis] = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> out_grad.<span class="hljs-built_in">reshape</span>(new_shape).<span class="hljs-built_in">broadcast_to</span>(node.inputs[<span class="hljs-number">0</span>].shape)<br></code></pre></td></tr></table></figure>
+
+<h1 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h1><p>这个部分感觉题意有点难理解，本质上很简单</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">find_topo_sort</span><span class="hljs-params">(node_list: List[Value])</span> -&gt; List[Value]:</span><br></code></pre></td></tr></table></figure>
+
+<p>这个函数给出了一个node_list，这里面可能有多个node，输出以这个node为终点的拓扑排序（正拓扑排序）</p>
+<blockquote>
+<p>以目前我的理解，不太明白为什么是node_list，一般不就是用最后lost的函数的结点为终点找拓扑排序吗。</p>
+<p>我看了一下测试的代码，也都是只用了一个节点，先留个坑</p>
+</blockquote>
+<p>下面这个函数给了一个dfs的模板</p>
+<ol>
+<li>第一个参数node代表当前遍历到了哪个结点</li>
+<li>第二个参数visited代表已经有哪些结点被访问过了</li>
+<li>第三个参数topo_order代表目前已经找到的拓扑排序，我们最后也就是要返回这个作为拓扑排序的答案</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">topo_sort_dfs</span><span class="hljs-params">(node, visited, topo_order)</span>:</span><br></code></pre></td></tr></table></figure>
+
+<p>实现代码很简单，就是题意对我来说有一点晦涩，感觉和不太熟悉怎么用终点推出拓扑排序有关，菜狗</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">find_topo_sort</span><span class="hljs-params">(node_list: List[Value])</span> -&gt; List[Value]:</span><br><span class="hljs-function">    ans =</span> []<br>    vis = <span class="hljs-built_in">set</span>()<br>    <span class="hljs-keyword">for</span> node in node_list:<br>        <span class="hljs-built_in">topo_sort_dfs</span>(node, vis, ans)<br>    <span class="hljs-keyword">return</span> ans<br>def <span class="hljs-built_in">topo_sort_dfs</span>(node, visited, topo_order):<br>    <span class="hljs-keyword">if</span> node in visited:<br>        <span class="hljs-keyword">return</span><br>    <span class="hljs-keyword">for</span> ne in node.inputs:<br>        <span class="hljs-built_in">topo_sort_dfs</span>(ne, visited, topo_order)<br>    visited.<span class="hljs-built_in">add</span>(node)<br>    topo_order.<span class="hljs-built_in">append</span>(node)<br></code></pre></td></tr></table></figure>
+
+<h1 id="反向模式微分"><a href="#反向模式微分" class="headerlink" title="反向模式微分"></a>反向模式微分</h1><p>函数签名</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">compute_gradient_of_variables</span><span class="hljs-params">(output_tensor, out_grad)</span></span><br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>第一个参数是最后输出的那个tensor</li>
+<li>第二个参数是这个tensor的梯度</li>
+</ol>
+<p>函数内已有的变量</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">node_to_output_grads_list: Dict[Tensor, List[Tensor]] = &#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这个字典表示，当前tensor对应的，所有输出tensor对它的偏导数</p>
+<p>使用起来也很简单，只要将对应的偏导数全部相加，就是当前tensor的梯度</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">reverse_topo_order = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">reversed</span>(<span class="hljs-built_in">find_topo_sort</span>([output_tensor])))<br></code></pre></td></tr></table></figure>
+
+<p>这就是反向的拓扑排序</p>
+<p>实现思路基本就是下面这个图</p>
+<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024161041846.png" srcset="/img/loading.gif" lazyload alt="image-20231024161041846"></p>
+<p>但是需要加入一些对当前框架的理解</p>
+<ol>
+<li>首先，这个函数的作用就是计算出每一个tensor对应的梯度，而通过上图也可以看到，我们在反向传播中是通过新建了一个tensor来保存梯度的。按照这个框架的意思，好像是将这个新建的tensor作为原来tensor的一个变量存入原来的tensor，这里可以用self.grad来存。感觉这个参数可以随便命名，可能后面的调用都是自己写</li>
+<li>这里要用到之前写的各种op中的gradient函数了，可以通过<code>gradient_as_tuple</code>来调用。这个函数也正是生成了对输入的所有tensor对应的偏导数tensor，核心操作了属于是</li>
+</ol>
+<p>因此，实现思路</p>
+<ol>
+<li>按照反向拓扑排序的顺序来遍历所有tensor</li>
+<li>根据<code>node_to_output_grads_list</code>对应的值，计算这个tensor的梯度，这里可以用框架提供的<code>sum_node_list</code>来计算梯度之和。然后将计算好的梯度存入当前node</li>
+<li>如果当前tensor没有input结点，也就是op为None，直接continue</li>
+<li>如果当前tensor有input结点<ol>
+<li>先通过<code>gradient_as_tuple</code>取出这个tensor对所有input的偏导数tensor</li>
+<li>然后将input和偏导数tensor一一对应的访问，加入字典<code>node_to_output_grads_list</code>中</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">compute_gradient_of_variables</span><span class="hljs-params">(output_tensor, out_grad)</span>:</span><br><span class="hljs-function">    node_to_output_grads_list: Dict[Tensor, List[Tensor]] =</span> &#123;&#125;<br>    node_to_output_grads_list[output_tensor] = [out_grad]<br>    reverse_topo_order = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">reversed</span>(<span class="hljs-built_in">find_topo_sort</span>([output_tensor])))<br>    <span class="hljs-keyword">for</span> node in reverse_topo_order:<br>        grads = <span class="hljs-built_in">sum_node_list</span>(node_to_output_grads_list[node])<br>        node.grad = grads<br>        <span class="hljs-keyword">if</span> node.op is None:<br>            <span class="hljs-keyword">continue</span><br>        node_to_input_grad = node.op.<span class="hljs-built_in">gradient_as_tuple</span>(node.grad, node)<br>        <span class="hljs-keyword">for</span> input_node, input_grad in <span class="hljs-built_in">zip</span>(node.inputs, node_to_input_grad):<br>            <span class="hljs-keyword">if</span> input_node <span class="hljs-keyword">not</span> in node_to_output_grads_list:<br>                node_to_output_grads_list[input_node] = []<br> node_to_output_grads_list[input_node].<span class="hljs-built_in">append</span>(input_grad)<br></code></pre></td></tr></table></figure>
+
+<h1 id="softmax-loss"><a href="#softmax-loss" class="headerlink" title="softmax loss"></a>softmax loss</h1><p>先实现两个op，要注意，在反向传播的过程中，要全程调用tensor的op，不能再用numpy的操作了</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">class</span> <span class="hljs-title">Log</span><span class="hljs-params">(TensorOp)</span>:</span><br><span class="hljs-function">    def compute(self, a):</span><br><span class="hljs-function">        return array_api.log(a)</span><br><span class="hljs-function">    def gradient(self, out_grad, node):</span><br><span class="hljs-function">        return divide(out_grad, node.inputs[<span class="hljs-number">0</span>])</span><br><span class="hljs-function">class Exp(TensorOp):</span><br><span class="hljs-function">    def compute(self, a):</span><br><span class="hljs-function">        return array_api.exp(a)</span><br><span class="hljs-function">    def gradient(self, out_grad, node):</span><br><span class="hljs-function">        return multiply(out_grad, exp(node.inputs[<span class="hljs-number">0</span>]))</span><br></code></pre></td></tr></table></figure>
+
+<p>实现softmax，基本就是翻译hw0里的softmax_loss函数，这里用了比较巧的计算方法， 那就是将减号前面和减号后面的分开计算，然后统一相减后求平均值</p>
+<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024171353873.png" srcset="/img/loading.gif" lazyload alt="image-20231024171353873"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">softmax_loss</span><span class="hljs-params">(Z, y_one_hot)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    e_z =</span> ndl.<span class="hljs-built_in">exp</span>(Z)<br>    e_s = ndl.<span class="hljs-built_in">summation</span>(e_z, (<span class="hljs-number">1</span>,))<br>    e_l = ndl.<span class="hljs-built_in">log</span>(e_s)<br>    e_s = ndl.<span class="hljs-built_in">summation</span>(e_l)<br>    <span class="hljs-comment">// 通过矩阵相乘，将one_hot向量变成对应的值</span><br>    y_s = ndl.<span class="hljs-built_in">summation</span>(y_one_hot * Z)<br>    <span class="hljs-built_in">return</span> (e_s - y_s) / Z.shape[<span class="hljs-number">0</span>]<br>    # END YOUR SOLUTION<br></code></pre></td></tr></table></figure>
+
+<h1 id="两层神经网络的SGD"><a href="#两层神经网络的SGD" class="headerlink" title="两层神经网络的SGD"></a>两层神经网络的SGD</h1><ol>
+<li>第一步，增加relu函数</li>
+</ol>
+<p>前向计算比较简单</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">compute</span><span class="hljs-params">(self, a)</span>:</span><br><span class="hljs-function">    return array_api.maximum(<span class="hljs-number">0</span>, a)</span><br></code></pre></td></tr></table></figure>
+
+<p>反向传播的时候，原来小于0的部分梯度为0，不用更新，所以只需要更新原来大于0的部分，这部分函数是$relu(x)&#x3D;x$，所以导数还是1</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    data =</span> node.<span class="hljs-built_in">realize_cached_data</span>().<span class="hljs-built_in">copy</span>()<br>    data[data &gt; <span class="hljs-number">0</span>] = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">multiply</span>(out_grad, <span class="hljs-built_in">Tensor</span>(data))<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>第二步，完成sgd</li>
+</ol>
+<p>基本的流程和hw0基本一致，但是有几个注意点</p>
+<ol>
+<li>这里的X和y是numpy类型，使用时要先转为Tensor</li>
+<li>反向传播是从最后一个结点开始的，这里就是loss</li>
+<li>更改参数直接操作W1和W2里面cached_data就可以完成</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">nn_epoch</span><span class="hljs-params">(X, y, W1, W2, lr=<span class="hljs-number">0.1</span>, batch=<span class="hljs-number">100</span>)</span>:    </span><br><span class="hljs-function">	batch_num =</span> X.shape[<span class="hljs-number">0</span>] <span class="hljs-comment">// batch</span><br>    Y = <span class="hljs-built_in">gethot</span>(y, W2.shape[<span class="hljs-number">1</span>])<br>    <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(batch_num):<br>        x_d = ndl.<span class="hljs-built_in">Tensor</span>(X[i * batch:(i + <span class="hljs-number">1</span>) * batch])<br>        y_d = ndl.<span class="hljs-built_in">Tensor</span>(Y[i * batch:(i + <span class="hljs-number">1</span>) * batch])<br>        x_w1 = ndl.<span class="hljs-built_in">matmul</span>(x_d, W1)<br>        th_x_w1 = ndl.<span class="hljs-built_in">relu</span>(x_w1)<br>        o = ndl.<span class="hljs-built_in">matmul</span>(th_x_w1, W2)<br>        loss = <span class="hljs-built_in">softmax_loss</span>(o, y_d)<br>        loss.<span class="hljs-built_in">backward</span>()<br>        W1 = ndl.<span class="hljs-built_in">Tensor</span>(W1.<span class="hljs-built_in">realize_cached_data</span>() - lr *<br>                        W1.grad.<span class="hljs-built_in">realize_cached_data</span>())<br>        W2 = ndl.<span class="hljs-built_in">Tensor</span>(W2.<span class="hljs-built_in">realize_cached_data</span>() - lr *<br>                        W2.grad.<span class="hljs-built_in">realize_cached_data</span>())<br>    <span class="hljs-keyword">return</span> W1, W2<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/" class="category-chain-item">深度学习框架</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/CMU10414/" class="category-chain-item">CMU10414</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/" class="print-no-link">#深度学习框架</a>
+      
+        <a href="/tags/CMU10414/" class="print-no-link">#CMU10414</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>cmu10414_lab2</div>
+      <div>http://example.com/2023/11/02/cmu10414-lab2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Cao Dong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/08/cmu10414-lab3/" title="cmu10414_lab3">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">cmu10414_lab3</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/10/29/cmu10414-lab1/" title="cmu10414_lab1">
+                        <span class="hidden-mobile">cmu10414_lab1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

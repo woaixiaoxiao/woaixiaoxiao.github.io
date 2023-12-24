@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Cao Dong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="熟悉 NDArrayNDArray类本质上就是对真正的数据进行了抽象，它主要由以下几部分组成  handle，其实代表的就是数据，而这个数据是以一个一维数组的形式存在 shape，虽然数据本质上是一维存在，但是我们在使用时，肯定是要用到多维数组的，这个shape就指定了这个多维数组 stride，stride可以指定每一维包含多少数据，可以方便地改变我们对数据的shape的解释 offest，表示">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cmu10414_lab4">
+<meta property="og:url" content="http://example.com/2023/11/20/cmu10414-lab4/index.html">
+<meta property="og:site_name" content="dcao&#39;s blog">
+<meta property="og:description" content="熟悉 NDArrayNDArray类本质上就是对真正的数据进行了抽象，它主要由以下几部分组成  handle，其实代表的就是数据，而这个数据是以一个一维数组的形式存在 shape，虽然数据本质上是一维存在，但是我们在使用时，肯定是要用到多维数组的，这个shape就指定了这个多维数组 stride，stride可以指定每一维包含多少数据，可以方便地改变我们对数据的shape的解释 offest，表示">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-19T20:28:08.000Z">
+<meta property="article:modified_time" content="2023-12-24T12:59:31.778Z">
+<meta property="article:author" content="Cao Dong">
+<meta property="article:tag" content="深度学习框架">
+<meta property="article:tag" content="CMU10414">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>cmu10414_lab4 - dcao&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CaoDong</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/scenery/p1.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="cmu10414_lab4"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Cao Dong
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-20 04:28" pubdate>
+          2023年11月20日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">cmu10414_lab4</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="熟悉-NDArray"><a href="#熟悉-NDArray" class="headerlink" title="熟悉 NDArray"></a>熟悉 NDArray</h1><p>NDArray类本质上就是对真正的数据进行了抽象，它主要由以下几部分组成</p>
+<ol>
+<li>handle，其实代表的就是数据，而这个数据是以一个一维数组的形式存在</li>
+<li>shape，虽然数据本质上是一维存在，但是我们在使用时，肯定是要用到多维数组的，这个shape就指定了这个多维数组</li>
+<li>stride，stride可以指定每一维包含多少数据，可以方便地改变我们对数据的shape的解释</li>
+<li>offest，表示当前NDArray的数据在handle中的起始位置</li>
+<li>device，表示是在哪种设备上</li>
+</ol>
+<h1 id="Part-1-Python-array-operations"><a href="#Part-1-Python-array-operations" class="headerlink" title="Part 1: Python array operations"></a>Part 1: Python array operations</h1><h2 id="reshape"><a href="#reshape" class="headerlink" title="reshape"></a>reshape</h2><p>只需要修改shape和stride，其中stride可以通过<code>compact_strides</code>得到</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> self.size != <span class="hljs-built_in">prod</span>(new_shape):<br>    raise <span class="hljs-built_in">ValueError</span>()<br><span class="hljs-keyword">if</span> self.<span class="hljs-built_in">is_compact</span>() is False:<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">ValueError</span>()<br><span class="hljs-keyword">return</span> NDArray.<span class="hljs-built_in">make</span>(<br>    new_shape,<br>    self.<span class="hljs-built_in">compact_strides</span>(new_shape),<br>    self.device,<br>    self._handle,<br>    self._offset<br>    )<br></code></pre></td></tr></table></figure>
+
+<h2 id="permute"><a href="#permute" class="headerlink" title="permute"></a>permute</h2><p><code>permute(self, new_axes)</code>，通过指定axes来打乱原先的维度，要做的也只是修改shape和stride</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">new_shape = <span class="hljs-built_in">tuple</span>(np.<span class="hljs-built_in">array</span>(self.shape)[<span class="hljs-built_in">list</span>(new_axes)])<br>new_stride = <span class="hljs-built_in">tuple</span>(np.<span class="hljs-built_in">array</span>(self.strides)[<span class="hljs-built_in">list</span>(new_axes)])<br><span class="hljs-keyword">return</span> NDArray.<span class="hljs-built_in">make</span>(<br>    new_shape,<br>    new_stride,<br>    self.device,<br>    self._handle,<br>    self._offset<br>    )<br></code></pre></td></tr></table></figure>
+
+<h2 id="broadcast-to"><a href="#broadcast-to" class="headerlink" title="broadcast_to"></a>broadcast_to</h2><p><code>broadcast_to(self, new_shape)</code>，将一些长度为1的维度广播成指定的长度，要改变shape和stride，其中stride就是将广播的维度的stride都设置为0即可</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">assert</span> (<span class="hljs-built_in">len</span>(new_shape) == <span class="hljs-built_in">len</span>(self.shape))<br>new_stride = np.<span class="hljs-built_in">array</span>(self.strides)<br><span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(self.shape)):<br>    <span class="hljs-keyword">if</span> self.shape[i] != new_shape[i]:<br>        <span class="hljs-keyword">if</span> self.shape[i] != <span class="hljs-number">1</span>:<br>            raise AssertionError<br>        <span class="hljs-keyword">else</span>:<br>            new_stride[i] = <span class="hljs-number">0</span><br><span class="hljs-keyword">return</span> NDArray.<span class="hljs-built_in">make</span>(<br>    <span class="hljs-built_in">tuple</span>(new_shape), <span class="hljs-built_in">tuple</span>(<br>        new_stride), self.device, self._handle, self._offset<br>    )<br></code></pre></td></tr></table></figure>
+
+<h2 id="getitem"><a href="#getitem" class="headerlink" title="getitem"></a>getitem</h2><p><code>__getitem__(self, idxs)</code>，这是对取值符号<code>[]</code>的重载，框架保证idxs是一个元组，并且里面的每个元素都是切片的形式，并且都是从前往后遍历的常规切片，格式为$[start,stop,step]$</p>
+<p>这里shape，stride，offset都要修改</p>
+<p>shape：计算出切片之后，每个维度还剩下的长度</p>
+<p>stride：在原来的stride基础上，乘上切片指定的step</p>
+<p>offset：计算切片的起始位置（每个维度都要）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"># BEGIN YOUR SOLUTION<br># 计算新的shape<br>new_shape = []<br><span class="hljs-keyword">for</span> sl in idxs:<br>    start, end, step = sl.start, sl.stop, sl.step<br>    new_shape.<span class="hljs-built_in">append</span>(math.<span class="hljs-built_in">ceil</span>((end - start) / step))<br># 计算新的offset<br>offset = []<br><span class="hljs-keyword">for</span> st, sl in <span class="hljs-built_in">zip</span>(self.strides, idxs):<br>    offset.<span class="hljs-built_in">append</span>(st * sl.start)<br>new_offset = <span class="hljs-built_in">sum</span>(np.<span class="hljs-built_in">array</span>(offset))<br># 计算新的stride<br>new_strides = []<br><span class="hljs-keyword">for</span> st, sl in <span class="hljs-built_in">zip</span>(self.strides, idxs):<br>    new_strides.<span class="hljs-built_in">append</span>(st * sl.step)<br><span class="hljs-keyword">return</span> NDArray.<span class="hljs-built_in">make</span>(<br>    <span class="hljs-built_in">tuple</span>(new_shape),<br>    <span class="hljs-built_in">tuple</span>(new_strides),<br>    self.device,<br>    self._handle,<br>    new_offset<br>    )<br># END YOUR SOLUTION<br></code></pre></td></tr></table></figure>
+
+<h1 id="Part-2-CPU-Backend-Compact-and-setitem"><a href="#Part-2-CPU-Backend-Compact-and-setitem" class="headerlink" title="Part 2: CPU Backend - Compact and setitem"></a>Part 2: CPU Backend - Compact and setitem</h1><p>这个部分要完成三个函数，但是基本一样</p>
+<h2 id="compact"><a href="#compact" class="headerlink" title="compact"></a>compact</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Compact</span><span class="hljs-params">(<span class="hljs-type">const</span> AlignedArray &amp;a, AlignedArray *out, std::vector&lt;<span class="hljs-type">int32_t</span>&gt; shape,std::vector&lt;<span class="hljs-type">int32_t</span>&gt; strides, <span class="hljs-type">size_t</span> offset)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>a是一个不紧凑的数组，要将其按照shape，strides和offset的格式紧凑到out中，本来就是一个多重循环就搞定了，但是因为这里shape的维度不定，不知道要写几重循环，所以需要模拟循环多重的过程</p>
+<h2 id="EwiseSetitem"><a href="#EwiseSetitem" class="headerlink" title="EwiseSetitem"></a>EwiseSetitem</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">EwiseSetitem</span><span class="hljs-params">(<span class="hljs-type">const</span> AlignedArray&amp; a, AlignedArray* out, std::vector&lt;<span class="hljs-type">uint32_t</span>&gt; shape,</span></span><br><span class="hljs-params"><span class="hljs-function">                  std::vector&lt;<span class="hljs-type">uint32_t</span>&gt; strides, <span class="hljs-type">size_t</span> offset)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>这里面a是一个紧凑数组，out不是紧凑的，后面的三个参数是用来形容out的</p>
+<p>这里是将一个紧凑的变成一个不紧凑的，可以用来实现切片复制，比如<code>a[,3:4,]=b</code></p>
+<h2 id="ScalarSetitem"><a href="#ScalarSetitem" class="headerlink" title="ScalarSetitem"></a>ScalarSetitem</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ScalarSetitem</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">size_t</span> size, <span class="hljs-type">scalar_t</span> val, AlignedArray *out, std::vector&lt;<span class="hljs-type">int32_t</span>&gt; shape,</span></span><br><span class="hljs-params"><span class="hljs-function">                   std::vector&lt;<span class="hljs-type">int32_t</span>&gt; strides, <span class="hljs-type">size_t</span> offset)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>将值设置为固定值</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>要注意的是，这里面a和out的需要操作的数量一定是相同的</p>
+<p>即不紧凑的那个的shape和stride相乘之和，一定等于紧凑的那个的cnt</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">RealOp</span><span class="hljs-params">(<span class="hljs-type">const</span> AlignedArray *a, AlignedArray *out, std::vector&lt;<span class="hljs-type">int32_t</span>&gt; shape,</span></span><br><span class="hljs-params"><span class="hljs-function">            std::vector&lt;<span class="hljs-type">int32_t</span>&gt; strides, <span class="hljs-type">size_t</span> offset, OpMode mode, <span class="hljs-type">int</span> val)</span> </span>&#123;<br>    <span class="hljs-type">int</span> for_len = shape.<span class="hljs-built_in">size</span>();             <span class="hljs-comment">// for循环的层数</span><br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">uint32_t</span>&gt; <span class="hljs-title">loop</span><span class="hljs-params">(for_len, <span class="hljs-number">0</span>)</span></span>; <span class="hljs-comment">// 记录当前各层的循环次数，0代表最外层，for_len-1代表最里面</span><br>    <span class="hljs-type">int</span> cnt = <span class="hljs-number">0</span>;                            <span class="hljs-comment">// out的指针</span><br>    <span class="hljs-comment">// 开始循环</span><br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>        <span class="hljs-comment">// 计算a的索引，并给out赋值</span><br>        <span class="hljs-type">int</span> idx = offset;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; for_len; i++) &#123;<br>            idx += loop[i] * strides[i];<br>        &#125;<br>        <span class="hljs-keyword">switch</span> (mode) &#123;<br>        <span class="hljs-keyword">case</span> in_mode:<br>            out-&gt;ptr[cnt] = a-&gt;ptr[idx];<br>            cnt += <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> out_mode:<br>            out-&gt;ptr[idx] = a-&gt;ptr[cnt];<br>            cnt += <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> set_mode:<br>            out-&gt;ptr[idx] = val;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-comment">// 更新loop，先更新最内层，然后根据有没有超出shape判断是否要更新上一层的loop</span><br>        <span class="hljs-type">int</span> modify_idx = for_len - <span class="hljs-number">1</span>;<br>        loop[modify_idx] += <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">while</span> (loop[modify_idx] == shape[modify_idx]) &#123;<br>            <span class="hljs-keyword">if</span> (modify_idx == <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            loop[modify_idx] = <span class="hljs-number">0</span>;<br>            modify_idx -= <span class="hljs-number">1</span>;<br>            loop[modify_idx] += <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Part-3-CPU-Backend-Elementwise-and-scalar-operations"><a href="#Part-3-CPU-Backend-Elementwise-and-scalar-operations" class="headerlink" title="Part 3: CPU Backend - Elementwise and scalar operations"></a>Part 3: CPU Backend - Elementwise and scalar operations</h1><p>实现各种操作，通过std提供的数学函数来实现都比较简单</p>
+<p>这里可以看一下Python文件和C文件是怎么联动的</p>
+<p>通过<code>m.def(&quot;ewise_mul&quot;, EwiseMul);</code>就可以将python中的<code>ewise_mul</code>对应到c语言的<code>EwiseMul</code></p>
+<p>而在Python文件中，先对操作符进行重载，然后将相关的ewise或者scalar函数当做参数传入<code>ewise_or_scalar</code>函数。这个函数进一步根据other的类型选择执行哪个</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">self.<span class="hljs-built_in">ewise_or_scalar</span>(<br>            other, self.device.ewise_mul, self.device.scalar_mul<br>            )<br></code></pre></td></tr></table></figure>
+
+<p>如果other是ndarray，就会执行</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">ewise_func</span>(self.<span class="hljs-built_in">compact</span>()._handle,<br>           other.<span class="hljs-built_in">compact</span>()._handle, out._handle)<br></code></pre></td></tr></table></figure>
+
+<p>而这个函数也对应到了这样的c语言参数列表</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">EwiseDiv</span><span class="hljs-params">(<span class="hljs-type">const</span> AlignedArray &amp;a, <span class="hljs-type">const</span> AlignedArray &amp;b, AlignedArray *out)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>现在还不太清楚的是为什么传入的都是handle，怎么out的就是指针，其他的就是引用</p>
+<h1 id="Part-4-CPU-Backend-Reductions"><a href="#Part-4-CPU-Backend-Reductions" class="headerlink" title="Part 4: CPU Backend - Reductions"></a>Part 4: CPU Backend - Reductions</h1><p>这里要完成对特定维度的sum或者max函数</p>
+<p>在numpy中，可以通过直接axes实现，但是在c数组中，就有点麻烦了</p>
+<p>lab先在Python文件中对这个操作进行了预处理</p>
+<ol>
+<li>首先，只允许指定一个轴</li>
+<li>通过改变shape和stride，将我们需要操作的一个reduce块变成连续的<ol>
+<li>首先，将要操作的那个维度放到shape的最后，可以通过<code>permute</code>来完成维度的移动。</li>
+<li>构造出reduce操作之后out的形状，就是将操作的那个轴的长度变成1</li>
+</ol>
+</li>
+</ol>
+<p>因此，在c文件中，只需要将a数组分段求和或者求最大值，然后依次存入out数组就行了</p>
+<h1 id="Part-5-CPU-Backend-Matrix-multiplication"><a href="#Part-5-CPU-Backend-Matrix-multiplication" class="headerlink" title="Part 5: CPU Backend - Matrix multiplication"></a>Part 5: CPU Backend - Matrix multiplication</h1><p>第一部分的<code>Matmul</code>就是常规的二维矩阵乘法，记得要在累加之前先清零</p>
+<p>第二部分的<code>MatmulTiled</code>是以<code>Tile</code>为变成的正方形进行操作</p>
+<ol>
+<li><p>首先需要完成<code>AlignedDot</code>，这个函数是对两个正方形矩形做乘法</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; TILE; i++) <br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> j = <span class="hljs-number">0</span>; j &lt; TILE; j++) <br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> k = <span class="hljs-number">0</span>; k &lt; TILE; k++) <br>            out[i * TILE + j] += a[i * TILE + k] * b[k * TILE + j];<br></code></pre></td></tr></table></figure>
+
+<p> 需要注意的是，这里面的out后续还会加上其他的正方形相乘之后，因此不能在操作前清零</p>
+</li>
+<li><p>在上面这个函数的帮助下，求出两个四维矩阵相乘的结果</p>
+<p> 只需要遍历out每一个<code>Tile×Tile</code>的正方形，它是由很多个a和b的正方形相乘得到。在<code>AlignedDot</code>的抽象下可以将正方形看成一个普通的整数</p>
+<p> <code>MatmulTiled</code>需要在开始操作之前对out初始化为0</p>
+</li>
+</ol>
+<p>之所以要用Tile这种乘法，好像是为了利用cpu的向量化的操作，这一块目前还没啥了解</p>
+<ol>
+<li><code>__restrict__</code>表示这一块区域只有当前指针可以访问到，因此不会和别人有重复的区域。这个应该是可以增加cpu的并行性能</li>
+<li><code>__builtin_assume_aligned</code>表示这个指针在内存中已经对齐了。这个应该是增加内存访问的性能</li>
+</ol>
+<h1 id="Part-6-CUDA-Backend-Compact-and-setitem"><a href="#Part-6-CUDA-Backend-Compact-and-setitem" class="headerlink" title="Part 6: CUDA Backend - Compact and setitem"></a>Part 6: CUDA Backend - Compact and setitem</h1><p>要完成的效果和cpu的基本一样，但是因为cuda的特点，我们不需要手动模拟n重for循环，直接用线程块的id来表示当前处于for循环的哪个位置</p>
+<p>因此，通过gid和shape，就可以得出来loop数组，然后再在便宜的基础上加上loop数组和stride数组的点积，就可以得到非compact数组的坐标。这里要注意，对于紧凑的数组，stride可以通过shape计算出来，但是对于非紧凑的数组，stride和shape没有必然的关系，因此在这里计算loop数组的时候，需要手动倒序遍历shape数组</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">__device__ <span class="hljs-type">size_t</span> <span class="hljs-title">GetIndex</span><span class="hljs-params">(<span class="hljs-type">size_t</span> cnt, CudaVec shape, CudaVec strides, <span class="hljs-type">size_t</span> offset)</span> </span>&#123;<br>    <span class="hljs-type">int</span> pre_len = <span class="hljs-number">1</span>, cur_len;<br>    <span class="hljs-type">size_t</span> loop[MAX_VEC_SIZE];<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = shape.size - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) &#123;<br>        cur_len = pre_len * shape.data[i];<br>        loop[i] = (cnt % cur_len) / pre_len;<br>        pre_len = cur_len;<br>    &#125;<br>    <span class="hljs-type">size_t</span> idx = offset;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; strides.size; i++) &#123;<br>        idx += loop[i] * strides.data[i];<br>    &#125;<br>    <span class="hljs-keyword">return</span> idx;<br>&#125;<br><br><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">CompactKernel</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">scalar_t</span> *a, <span class="hljs-type">scalar_t</span> *out, <span class="hljs-type">size_t</span> size, CudaVec shape,</span></span><br><span class="hljs-params"><span class="hljs-function">                              CudaVec strides, <span class="hljs-type">size_t</span> offset, Modes mode, <span class="hljs-type">int</span> val = <span class="hljs-number">-1</span>)</span> </span>&#123;<br>    <span class="hljs-type">size_t</span> gid = blockIdx.x * blockDim.x + threadIdx.x;<br>    <span class="hljs-keyword">if</span> (gid &lt; size) &#123;<br>        <span class="hljs-type">int</span> idx = <span class="hljs-built_in">GetIndex</span>(gid, shape, strides, offset);<br>        <span class="hljs-keyword">switch</span> (mode) &#123;<br>        <span class="hljs-keyword">case</span> mode_in:<br>            out[gid] = a[idx];<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> mode_out:<br>            out[idx] = a[gid];<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> mode_set:<br>            out[idx] = val;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这两个函数就是最重要的，要实现的三个函数调用这个函数即可。要注意传入的size，这个size应该是紧凑的数组的长度，因此在Compact函数中要传入out.size，而在EwiseSetitem中，应该传入a.size。而传给CudaDims的size同理，也是这样的。</p>
+<h1 id="Part-7-CUDA-Backend-Elementwise-and-scalar-operations"><a href="#Part-7-CUDA-Backend-Elementwise-and-scalar-operations" class="headerlink" title="Part 7: CUDA Backend - Elementwise and scalar operations"></a>Part 7: CUDA Backend - Elementwise and scalar <strong>operations</strong></h1><p>复制粘贴， 替换符号</p>
+<p>感觉正确的做法应该是重载操作符，但是我不会</p>
+<h1 id="Part-8-CUDA-Backend-Reductions"><a href="#Part-8-CUDA-Backend-Reductions" class="headerlink" title="Part 8: CUDA Backend - Reductions"></a>Part 8: CUDA Backend - Reductions</h1><p>意思和cpu的一样，很简单了</p>
+<h1 id="Part-9-CUDA-Backend-Matrix-multiplication"><a href="#Part-9-CUDA-Backend-Matrix-multiplication" class="headerlink" title="Part 9: CUDA Backend - Matrix multiplication"></a>Part 9: CUDA Backend - Matrix multiplication</h1><p>这里需要实现cuda上的矩阵乘法，不优化的还是挺好写的</p>
+<p>首先要自己构造grid和block，为了防止M和P过大，这里选择让grid的长和宽为<code>BASE_THREAD_NUM</code>，block的长和宽为M和P除以这个值的上取整</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">dim3 <span class="hljs-title">grid</span><span class="hljs-params">(BASE_THREAD_NUM, BASE_THREAD_NUM)</span></span>;<br><span class="hljs-function">dim3 <span class="hljs-title">block</span><span class="hljs-params">(Ceil(M), Ceil(P))</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>在核函数中，用当前线程的x和y坐标代表out的坐标，然后用一个for循环就可以完成点积和累加了</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/" class="category-chain-item">深度学习框架</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/CMU10414/" class="category-chain-item">CMU10414</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/" class="print-no-link">#深度学习框架</a>
+      
+        <a href="/tags/CMU10414/" class="print-no-link">#CMU10414</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>cmu10414_lab4</div>
+      <div>http://example.com/2023/11/20/cmu10414-lab4/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Cao Dong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/24/6-5940-lab1/" title="6.5940_lab1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">6.5940_lab1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/08/cmu10414-lab3/" title="cmu10414_lab3">
+                        <span class="hidden-mobile">cmu10414_lab3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
