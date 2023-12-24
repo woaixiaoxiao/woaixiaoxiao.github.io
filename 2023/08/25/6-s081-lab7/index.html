@@ -1,0 +1,760 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Cao Dong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Uthread: switching between threads在这个练习中，你将为一个用户级别线程系统设计上下文切换机制，并实现它。 task你的任务是提出一个计划，并实现它  创造线程 切换线程的时候，保存和恢复寄存器  当你完成的时候，make grade会显示你通过了uthreadtest 你将需要在user&#x2F;uthread.c中的thread_create()和thread_sch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.s081_lab7">
+<meta property="og:url" content="http://example.com/2023/08/25/6-s081-lab7/index.html">
+<meta property="og:site_name" content="dcao&#39;s blog">
+<meta property="og:description" content="Uthread: switching between threads在这个练习中，你将为一个用户级别线程系统设计上下文切换机制，并实现它。 task你的任务是提出一个计划，并实现它  创造线程 切换线程的时候，保存和恢复寄存器  当你完成的时候，make grade会显示你通过了uthreadtest 你将需要在user&#x2F;uthread.c中的thread_create()和thread_sch">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204530.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/d3b030e817b0d7a4a2b6c28385d3b98e.png">
+<meta property="article:published_time" content="2023-08-24T20:28:08.000Z">
+<meta property="article:modified_time" content="2023-12-24T12:46:08.685Z">
+<meta property="article:author" content="Cao Dong">
+<meta property="article:tag" content="Operating System">
+<meta property="article:tag" content="MIT6.S081">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204530.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>6.s081_lab7 - dcao&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CaoDong</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/scenery/p1.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="6.s081_lab7"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Cao Dong
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-25 04:28" pubdate>
+          2023年8月25日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">6.s081_lab7</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204530.png" srcset="/img/loading.gif" lazyload alt="20231224204530"></p>
+<h1 id="Uthread-switching-between-threads"><a href="#Uthread-switching-between-threads" class="headerlink" title="Uthread: switching between threads"></a>Uthread: switching between threads</h1><p>在这个练习中，你将为一个用户级别线程系统设计上下文切换机制，并实现它。</p>
+<h2 id="task"><a href="#task" class="headerlink" title="task"></a>task</h2><p>你的任务是提出一个计划，并实现它</p>
+<ol>
+<li>创造线程</li>
+<li>切换线程的时候，保存和恢复寄存器</li>
+</ol>
+<p>当你完成的时候，<code>make grade</code>会显示你通过了<code>uthread</code>test</p>
+<p>你将需要在<code>user/uthread.c</code>中的<code>thread_create()</code>和<code>thread_schedule()</code>，在<code>user/uthread_switch.S</code>的<code>thread_switch</code>添加代码</p>
+<ol>
+<li><p>一个目标是去保证，当<code>thread_schedule()</code>第一次运行一个线程时，这个线程会在它自己的栈上执行传递给<code>thread_create</code>的函数</p>
+</li>
+<li><p>另一个目标是去保证<code>thread_switch</code>保存被切换线程的寄存器，恢复被恢复线程的寄存器，并且到被恢复线程上次被中断的地方继续执行。</p>
+</li>
+<li><p>你将不得不决定将寄存器存放在哪里，修改<code>struct thread</code>去持有寄存器是不错的想法</p>
+</li>
+<li><p>你需要在<code>thread_schedule</code>调用<code>thread_switch</code></p>
+</li>
+<li><p>你可以传递任何你需要的参数给<code>thread_switch</code>，但是目标就是切换线程</p>
+</li>
+</ol>
+<h2 id="hints"><a href="#hints" class="headerlink" title="hints"></a>hints</h2><ol>
+<li><code>thread_switch</code>只需要保存和恢复被调用函数保护寄存器</li>
+<li>你可以在<code>user/uthread.asm</code>中看到uthread的汇编代码</li>
+</ol>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>代码非常少，主要是要搞清楚整个流程。线程的切换主要就是通过一个ra寄存器记录切换后函数从哪开始执行，通过一个sp寄存器记录切换之后栈的地址，然后就是一些被调用者保护寄存器。</p>
+<blockquote>
+<p>为什么只需要保存callee保护寄存器？</p>
+<p>因为switch函数就是一个普通的c函数，在调用它的时候，调用函数会将调用者保护寄存器压入栈中保存，在它返回之后，会从&gt;栈中恢复被调用者保护寄存器。在switch结束之后，通过栈就可以恢复caller寄存器（这也是为什么要保存和恢复sp指针）。</p>
+<p>而对于callee保护寄存器，就是被调用的函数来保护的了。也就是说，通过ra，sp以及callee保护寄存器，我们就可以恢复到某&gt;个线程的某个函数执行之后的镜像，缺一不可。</p>
+<p>对于第一次被调度的进程，就更无所谓了，反正也不需要恢复什么caller和callee寄存器，本质上只需要ra和sp即可，但是为了统&gt;一写法，操作一下callee寄存器也没问题</p>
+</blockquote>
+<h3 id="上下文的恢复和保存"><a href="#上下文的恢复和保存" class="headerlink" title="上下文的恢复和保存"></a>上下文的恢复和保存</h3><p>而在我们的这个task中，线程切换时也要用到上述功能，因此需要模仿xv6构建一个context的结构体，并将其加入到thread的定义中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">context</span> &#123;</span><br>    uint64 ra;<br>    uint64 sp;<br><br>    <span class="hljs-comment">// callee-saved</span><br>    uint64 s0;<br>    uint64 s1;<br>    uint64 s2;<br>    uint64 s3;<br>    uint64 s4;<br>    uint64 s5;<br>    uint64 s6;<br>    uint64 s7;<br>    uint64 s8;<br>    uint64 s9;<br>    uint64 s10;<br>    uint64 s11;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>然后修改<code>uthread_switch</code>的定义为<code>extern void thread_switch(struct context *, struct context *);</code>，并将上下文保存和恢复的汇编加入对应的汇编文件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c">	.text<br><br>	<span class="hljs-comment">/*</span><br><span class="hljs-comment">         * save the old thread&#x27;s registers,</span><br><span class="hljs-comment">         * restore the new thread&#x27;s registers.</span><br><span class="hljs-comment">         */</span><br><br>	.globl thread_switch<br>thread_switch:<br>	<span class="hljs-comment">/* YOUR CODE HERE */</span><br>	sd ra, <span class="hljs-number">0</span>(a0)<br>	sd sp, <span class="hljs-number">8</span>(a0)<br>	sd s0, <span class="hljs-number">16</span>(a0)<br>	sd s1, <span class="hljs-number">24</span>(a0)<br>	sd s2, <span class="hljs-number">32</span>(a0)<br>	sd s3, <span class="hljs-number">40</span>(a0)<br>	sd s4, <span class="hljs-number">48</span>(a0)<br>	sd s5, <span class="hljs-number">56</span>(a0)<br>	sd s6, <span class="hljs-number">64</span>(a0)<br>	sd s7, <span class="hljs-number">72</span>(a0)<br>	sd s8, <span class="hljs-number">80</span>(a0)<br>	sd s9, <span class="hljs-number">88</span>(a0)<br>	sd s10, <span class="hljs-number">96</span>(a0)<br>	sd s11, <span class="hljs-number">104</span>(a0)<br><br>	ld ra, <span class="hljs-number">0</span>(a1)<br>	ld sp, <span class="hljs-number">8</span>(a1)<br>	ld s0, <span class="hljs-number">16</span>(a1)<br>	ld s1, <span class="hljs-number">24</span>(a1)<br>	ld s2, <span class="hljs-number">32</span>(a1)<br>	ld s3, <span class="hljs-number">40</span>(a1)<br>	ld s4, <span class="hljs-number">48</span>(a1)<br>	ld s5, <span class="hljs-number">56</span>(a1)<br>	ld s6, <span class="hljs-number">64</span>(a1)<br>	ld s7, <span class="hljs-number">72</span>(a1)<br>	ld s8, <span class="hljs-number">80</span>(a1)<br>	ld s9, <span class="hljs-number">88</span>(a1)<br>	ld s10, <span class="hljs-number">96</span>(a1)<br>	ld s11, <span class="hljs-number">104</span>(a1)<br>	<br>	ret    <span class="hljs-comment">/* return to ra */</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="thread-create"><a href="#thread-create" class="headerlink" title="thread_create"></a>thread_create</h3><p>在这里，我们需要设置ra和sp寄存器，分别指向函数的入口地址和栈的初始地址。其中栈的地址应该定位在栈的最高地址，因为它向下增长</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// YOUR CODE HERE</span><br>t-&gt;ctx.ra = (uint64)func;<br>t-&gt;ctx.sp = (uint64)t-&gt;<span class="hljs-built_in">stack</span> + STACK_SIZE - <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="thread-schedule"><a href="#thread-schedule" class="headerlink" title="thread_schedule"></a>thread_schedule</h3><p>最后在这个函数中加入一行即可</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c">   <span class="hljs-comment">/* YOUR CODE HERE</span><br><span class="hljs-comment">* Invoke thread_switch to switch from t to next_thread:</span><br><span class="hljs-comment">* thread_switch(??, ??);</span><br><span class="hljs-comment">*/</span><br>   thread_switch(&amp;t-&gt;ctx, &amp;current_thread-&gt;ctx);<br></code></pre></td></tr></table></figure>
+
+
+
+<p>这个task自己要写的代码非常少，但是<code>uthread.c</code>整个文件可以说包含了上下文切换最关键的部分了，很值得学习。</p>
+<p>并且原来在用户态，也可以在c代码里面嵌入汇编代码，神奇。</p>
+<h1 id="Using-threads"><a href="#Using-threads" class="headerlink" title="Using threads"></a>Using threads</h1><p>首先，为了避免插入时出错，你需要在<code>put</code>和<code>get</code>中使用锁，如果能够在make grade中通过ph_safe，就说明成功</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">pthread_mutex_t</span> lock;            <span class="hljs-comment">// declare a lock</span><br>pthread_mutex_init(&amp;lock, <span class="hljs-literal">NULL</span>); <span class="hljs-comment">// initialize the lock</span><br>pthread_mutex_lock(&amp;lock);       <span class="hljs-comment">// acquire lock</span><br>pthread_mutex_unlock(&amp;lock);     <span class="hljs-comment">// release lock</span><br></code></pre></td></tr></table></figure>
+
+<p>然后你应该优化你的代码，使得你能通过ph_fast的测试，你可以在每个桶上添加一个锁。两个线程至少要达到1.25倍的速度</p>
+<h2 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h2><p>直接一步到位了，给每个bucker设置一个锁，并在main函数中对锁初始化</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">pthread_mutex_t</span> locks[NBUCKET];<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">init_lock</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; NBUCKET; i++) &#123;<br>        pthread_mutex_init(&amp;locks[i], <span class="hljs-literal">NULL</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>然后构造两个宏，省的后面输入一大串</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOCK(i) (pthread_mutex_lock(&amp;locks[i]));</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> UNLOCK(i) (pthread_mutex_unlock(&amp;locks[i]));</span><br></code></pre></td></tr></table></figure>
+
+<p>最后在put和get的起始和末尾都加上一个<code>LOCK(i)</code>和<code>UNLOC(i)</code></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/d3b030e817b0d7a4a2b6c28385d3b98e.png" srcset="/img/loading.gif" lazyload alt="image-20230825163234832"></p>
+<h1 id="Barrier"><a href="#Barrier" class="headerlink" title="Barrier"></a>Barrier</h1><p>这部分的实验文档看得我迷迷糊糊的，还是看了半天源代码才看懂是啥意思。</p>
+<p>关键就是下面这个函数，我们每一次for循环，bstate.round都应该和循环轮数相同。再结合实验文档可以知道，就是要求我们通过barrier实现所有线程都在同一次for循环里，不能有人提前进入下一轮，因为这样的话，这个assert肯定就要错了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">void</span> *<br><span class="hljs-title function_">thread</span><span class="hljs-params">(<span class="hljs-type">void</span> *xa)</span> &#123;<br>    <span class="hljs-type">long</span> n = (<span class="hljs-type">long</span>)xa;<br>    <span class="hljs-type">long</span> delay;<br>    <span class="hljs-type">int</span> i;<br><br>    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">20000</span>; i++) &#123;<br>        <span class="hljs-type">int</span> t = bstate.round;<br>        assert(i == t);<br>        barrier();<br>        usleep(random() % <span class="hljs-number">100</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>然后就是这个结构体，它是关键。其中round代表的就是现在for循环的轮数，而nthread代表的是目前已经有多少个线程到达了屏障正在阻塞等待，然后上面就是两个锁，一个是常规的互斥锁，一个是条件变量</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">barrier</span> &#123;</span><br>    <span class="hljs-type">pthread_mutex_t</span> barrier_mutex;<br>    <span class="hljs-type">pthread_cond_t</span> barrier_cond;<br>    <span class="hljs-type">int</span> nthread; <span class="hljs-comment">// Number of threads that have reached this round of the barrier</span><br>    <span class="hljs-type">int</span> round;   <span class="hljs-comment">// Barrier round</span><br>&#125; bstate;<br></code></pre></td></tr></table></figure>
+
+<p>条件变量的使用也很有意思。第一个wait操作，要求这个线程必须持有锁，然后调用wait之后，这个线程会释放这个锁，然后进入阻塞睡眠。第二个广播操作，会将通过cond阻塞的所有线程都唤醒。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c">pthread_cond_wait(&amp;cond, &amp;mutex);  <span class="hljs-comment">// go to sleep on cond, releasing lock mutex, acquiring upon wake up</span><br>pthread_cond_broadcast(&amp;cond);     <span class="hljs-comment">// wake up every thread sleeping on cond</span><br></code></pre></td></tr></table></figure>
+
+<p>上面两个锁的组合就可以构建barrier函数。有一些宏定义，方便使用。</p>
+<p>首先，每个进入barrier的线程都应该将现在进入barrier的线程数量加1。而为了防止并发带来的问题，+1的过程肯定是要用锁的，我们这里正好就是用了barrier_mutex。</p>
+<p>然后，我们需要判断目前的数量是否已经达到了线程总数nthread</p>
+<ol>
+<li>如果没达到，那就通过条件变量让它睡觉去吧</li>
+<li>如果达到了，那么我们需要将所有因此阻塞的进程都唤醒<ol>
+<li>但是在唤醒之前，我们需要先将bstate的round和nthread变量给更新了</li>
+<li>如果我们是在唤醒之后更新，那么可能cpu瞬间就被别人抢去了，然后那些人就进入了下一轮for循环，直接assert失败。</li>
+</ol>
+</li>
+</ol>
+<p>还有一种很恶心的并发问题，就是如果我们很早就UNLOCK了，那么有可能某个线程还没有wait，就有一个线程调用了广播，那么后果就是这个线程永远不会被唤醒。不过在我们这里是不会出现这种情况的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOCK() (pthread_mutex_lock(&amp;bstate.barrier_mutex))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> UNLOCK() (pthread_mutex_unlock(&amp;bstate.barrier_mutex))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> WAIT() (pthread_cond_wait(&amp;bstate.barrier_cond, &amp;bstate.barrier_mutex))</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BROADCAST() (pthread_cond_broadcast(&amp;bstate.barrier_cond))</span><br><span class="hljs-type">static</span> <span class="hljs-type">void</span><br><span class="hljs-title function_">barrier</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// YOUR CODE HERE</span><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// Block until all threads have called barrier() and</span><br>    <span class="hljs-comment">// then increment bstate.round.</span><br>    <span class="hljs-comment">//</span><br>    LOCK();<br>    bstate.nthread += <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">if</span> (bstate.nthread &lt; nthread) &#123;<br>        WAIT();<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        bstate.round += <span class="hljs-number">1</span>;<br>        bstate.nthread = <span class="hljs-number">0</span>;<br>        BROADCAST();<br>    &#125;<br>    UNLOCK();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Operating-System/" class="category-chain-item">Operating System</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Operating-System/MIT6-S081/" class="category-chain-item">MIT6.S081</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Operating-System/" class="print-no-link">#Operating System</a>
+      
+        <a href="/tags/MIT6-S081/" class="print-no-link">#MIT6.S081</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>6.s081_lab7</div>
+      <div>http://example.com/2023/08/25/6-s081-lab7/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Cao Dong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/27/6-s081-lab8/" title="6.s081_lab8">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">6.s081_lab8</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/24/6-s081-lab6/" title="6.s081_lab6">
+                        <span class="hidden-mobile">6.s081_lab6</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

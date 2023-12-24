@@ -1,0 +1,741 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Cao Dong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="background 在开始写代码之前，回顾一下xv6book的第五章会有帮助 你将使用E1000去处理网络通信 E1000会和qemu模拟的lan通信 在qemu模拟的lan中 xv6的地址是10.0.2.15 qemu模拟的计算机的地址是10.0.2.2     qemu会将所有的网络包都记录在packets.pcap中 文件kernel&#x2F;e1000.c包含了E1000的初始化代码，以及你需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.s081_lab11">
+<meta property="og:url" content="http://example.com/2023/08/31/6-s081-lab11/index.html">
+<meta property="og:site_name" content="dcao&#39;s blog">
+<meta property="og:description" content="background 在开始写代码之前，回顾一下xv6book的第五章会有帮助 你将使用E1000去处理网络通信 E1000会和qemu模拟的lan通信 在qemu模拟的lan中 xv6的地址是10.0.2.15 qemu模拟的计算机的地址是10.0.2.2     qemu会将所有的网络包都记录在packets.pcap中 文件kernel&#x2F;e1000.c包含了E1000的初始化代码，以及你需">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png">
+<meta property="article:published_time" content="2023-08-30T20:28:08.000Z">
+<meta property="article:modified_time" content="2023-12-24T12:49:51.597Z">
+<meta property="article:author" content="Cao Dong">
+<meta property="article:tag" content="Operating System">
+<meta property="article:tag" content="MIT6.S081">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>6.s081_lab11 - dcao&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CaoDong</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/scenery/p1.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="6.s081_lab11"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Cao Dong
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-31 04:28" pubdate>
+          2023年8月31日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">6.s081_lab11</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/20231224204913.png" srcset="/img/loading.gif" lazyload alt="20231224204913"></p>
+<h1 id="background"><a href="#background" class="headerlink" title="background"></a>background</h1><ol>
+<li>在开始写代码之前，回顾一下xv6book的第五章会有帮助</li>
+<li>你将使用E1000去处理网络通信<ol>
+<li>E1000会和qemu模拟的lan通信</li>
+<li>在qemu模拟的lan中<ol>
+<li>xv6的地址是10.0.2.15</li>
+<li>qemu模拟的计算机的地址是10.0.2.2</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>qemu会将所有的网络包都记录在<code>packets.pcap</code>中</li>
+<li>文件<code>kernel/e1000.c</code>包含了E1000的初始化代码，以及你需要补充的接收和发送的空函数</li>
+<li><code>kernel/e1000_dev.h</code>包含了寄存器和标志位的定义</li>
+<li><code>kernel/net.c</code>和<code>kernel/net.h</code>包含了一个简单的内核栈去实现IP,UDP,ARP协议。这些文件也包含了一个灵活的数据结构去持有packet，叫作mbuf</li>
+</ol>
+<h1 id="your-job"><a href="#your-job" class="headerlink" title="your job"></a>your job</h1><ol>
+<li>完成<code>kernel/e1000.c</code>中的<code>e1000_transmit()</code>和<code>e1000_recv()</code></li>
+</ol>
+<p>简单捋一下实验的思路</p>
+<ol>
+<li>首先，我们要修改的是设备驱动，也就是内核层面的代码，它会和硬件设备协同完成数据包的发送和接受</li>
+<li>发送数据包时<ol>
+<li>内核只需要将已经准备好的mbuf放到一个缓冲数组中，就完事了。这就是缓冲数组的优点，我往里面一扔就行了</li>
+<li>网卡中应该也有固定的程序，它会自己讲缓冲数组的数据包给发送出去</li>
+<li>我们只需要完成1中的任务，网卡那边不需要我们管</li>
+</ol>
+</li>
+<li>接受数据包时<ol>
+<li>当网卡接收了数据时，它会将它存入另一个缓冲数组，存好之后它们通过一个中断，告诉内核来收数据了</li>
+<li>内核只需要将这个缓冲数组中已经到达的数据包传递给上层应用即可</li>
+</ol>
+</li>
+</ol>
+<p>以上就是基本的交互框架，但是因为设备驱动是内核，是纯软件，而网卡设备是硬件，所以双方的交互就有点麻烦。这里通过了一个很神奇的操作，就是寄存器映射，将硬件的寄存器给映射到了内核的地址空间中，我们访问内核的某个地址，就是在访问硬件的寄存器，这一下子就打通了内核和硬件之间的桥梁</p>
+<p>在<code>e1000_init</code>中，就将寄存器映射的起始地址赋值给了<code>regs</code>，并且将各种信息和地址都存放到寄存器中，比如数组<code>tx_ring</code>的地址就放到了<code>regs[E1000_TDBAL] = (uint64)tx_ring;</code></p>
+<p>至此，准备工作就做完了，我们现在就需要增加内核代码，使其能够和网卡配合，完成数据报的发送和接受</p>
+<h2 id="hints：e1000-transmit"><a href="#hints：e1000-transmit" class="headerlink" title="hints：e1000_transmit"></a>hints：e1000_transmit</h2><p>这个lab很有意思，它的hints基本就是给了你所有的伪代码，你一个一个去实现就行了</p>
+<ol>
+<li>首先，让我们通过<code>E1000_TDT</code>为索引去regs取出当前的index，其中regs就是一个<code>uint</code>类型的数组的头指针</li>
+<li>判断这个index指向的buf的状态，通过这个index去<code>tx_ring</code>中取出des，状态就存于des里的status中。这里要和一个宏E1000_TXD_STAT_DD相与进行判断</li>
+<li>如果这个buf还存着之前的值，将它通过<code>mbuffree</code>给free掉</li>
+<li>按提示修改des的各种参数，并且当前buf修改为传入的参数m即可。其中des的cmd参数没有给出提示，估计是想让我们自己查手册，我直接抄了大佬的E1000_TXD_CMD_EOP | E1000_TXD_CMD_RS</li>
+<li>最后，更新寄存器的值（空闲buf的指针，也就是第1步取出来东西的那个寄存器）</li>
+</ol>
+<p>这里有个注意点就是，需要在函数首尾加锁。因为同一时刻，可能有多个进程想要通过网卡发送数据，这就形成了竞争的问题</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">e1000_transmit</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> mbuf *m)</span> &#123;<br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// Your code here.</span><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// the mbuf contains an ethernet frame; program it into</span><br>    <span class="hljs-comment">// the TX descriptor ring so that the e1000 sends it. Stash</span><br>    <span class="hljs-comment">// a pointer so that it can be freed after sending.</span><br>    <span class="hljs-comment">//</span><br>    acquire(&amp;e1000_lock);<br><br>    uint32 index = regs[E1000_TDT];<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tx_desc</span> *<span class="hljs-title">des</span> =</span> &amp;tx_ring[index];<br><br>    <span class="hljs-keyword">if</span> (!(des-&gt;status &amp; E1000_TXD_STAT_DD)) &#123;<br>        release(&amp;e1000_lock);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (tx_mbufs[index]) &#123;<br>        mbuffree(tx_mbufs[index]);<br>    &#125;<br><br>    des-&gt;addr = (uint64)m-&gt;head;<br>    des-&gt;length = m-&gt;len;<br>    des-&gt;cmd = E1000_TXD_CMD_EOP | E1000_TXD_CMD_RS;<br>    tx_mbufs[index] = m;<br><br>    regs[E1000_TDT] = (regs[E1000_TDT] + <span class="hljs-number">1</span>) % TX_RING_SIZE;<br><br>    release(&amp;e1000_lock);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="hints：e1000-recv"><a href="#hints：e1000-recv" class="headerlink" title="hints：e1000_recv"></a>hints：e1000_recv</h2><ol>
+<li>首先通过寄存器中<code>E1000_RDT</code>的值+1对RX_RING_SIZE取模获取待接收数据的索引</li>
+<li>判断这个索引指向的buf的状态是否是待接收</li>
+<li>如果是待接收，修改m-&gt;len并且通过<code>net_rx</code>将这个buf传递给上层</li>
+<li>通过mbufalloc在这个索引处再次新建一个buf，并且将这个buf的des的data指针指向这个buf的head，然后将状态设置为0</li>
+<li>最后将这个索引的寄存器的值+1,</li>
+</ol>
+<p>这里有两个注意点</p>
+<ol>
+<li>不需要加锁，因为这里给出了提示。如果这个函数没有运行完，那么不会产生另一个中断</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">e1000_intr</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-comment">// tell the e1000 we&#x27;ve seen this interrupt;</span><br>    <span class="hljs-comment">// without this the e1000 won&#x27;t raise any</span><br>    <span class="hljs-comment">// further interrupts.</span><br>    regs[E1000_ICR] = <span class="hljs-number">0xffffffff</span>;<br><br>    e1000_recv();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>需要使用while循环，把能读的数据包都读出来。我猜是因为一次中断不一定代表只有一个数据包到了，甚至在处理中断的过程中，还会有数据包到。如果每次中断只读一个，会导致丢很多包</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Operating-System/" class="category-chain-item">Operating System</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Operating-System/MIT6-S081/" class="category-chain-item">MIT6.S081</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Operating-System/" class="print-no-link">#Operating System</a>
+      
+        <a href="/tags/MIT6-S081/" class="print-no-link">#MIT6.S081</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>6.s081_lab11</div>
+      <div>http://example.com/2023/08/31/6-s081-lab11/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Cao Dong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/12/21/lock-free-queue/" title="网络程序设计_课程项目">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">网络程序设计_课程项目</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/30/6-s081-lab10/" title="6.s081_lab10">
+                        <span class="hidden-mobile">6.s081_lab10</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
