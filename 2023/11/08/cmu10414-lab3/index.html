@@ -18,22 +18,19 @@
   <meta name="author" content="Cao Dong">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Introduction to needle两个重要的问题  python&#x2F;needle&#x2F;autograd.py，定义了框架，包括但不限于以下部分 class Op class TensorOp(Op) class Value class Tensor(Value) compute_gradient_of_variables   python&#x2F;needle&#x2F;ops&#x2F;ops_mathematic.p">
+    <meta name="description" content="熟悉 NDArrayNDArray类本质上就是对真正的数据进行了抽象，它主要由以下几部分组成  handle，其实代表的就是数据，而这个数据是以一个一维数组的形式存在 shape，虽然数据本质上是一维存在，但是我们在使用时，肯定是要用到多维数组的，这个shape就指定了这个多维数组 stride，stride可以指定每一维包含多少数据，可以方便地改变我们对数据的shape的解释 offest，表示">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cmu10414_lab3">
 <meta property="og:url" content="http://example.com/2023/11/08/cmu10414-lab3/index.html">
 <meta property="og:site_name" content="dcao&#39;s blog">
-<meta property="og:description" content="Introduction to needle两个重要的问题  python&#x2F;needle&#x2F;autograd.py，定义了框架，包括但不限于以下部分 class Op class TensorOp(Op) class Value class Tensor(Value) compute_gradient_of_variables   python&#x2F;needle&#x2F;ops&#x2F;ops_mathematic.p">
+<meta property="og:description" content="熟悉 NDArrayNDArray类本质上就是对真正的数据进行了抽象，它主要由以下几部分组成  handle，其实代表的就是数据，而这个数据是以一个一维数组的形式存在 shape，虽然数据本质上是一维存在，但是我们在使用时，肯定是要用到多维数组的，这个shape就指定了这个多维数组 stride，stride可以指定每一维包含多少数据，可以方便地改变我们对数据的shape的解释 offest，表示">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024161041846.png">
-<meta property="og:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024171353873.png">
 <meta property="article:published_time" content="2023-11-07T20:28:08.000Z">
-<meta property="article:modified_time" content="2023-12-24T12:59:08.037Z">
+<meta property="article:modified_time" content="2023-12-31T08:23:53.630Z">
 <meta property="article:author" content="Cao Dong">
 <meta property="article:tag" content="深度学习框架">
 <meta property="article:tag" content="CMU10414">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024161041846.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -233,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.3k 字
+          2.2k 字
         
       </span>
     
@@ -294,167 +291,101 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Introduction-to-needle"><a href="#Introduction-to-needle" class="headerlink" title="Introduction to needle"></a>Introduction to <code>needle</code></h1><p>两个重要的问题</p>
+                <h1 id="熟悉-NDArray"><a href="#熟悉-NDArray" class="headerlink" title="熟悉 NDArray"></a>熟悉 NDArray</h1><p>NDArray类本质上就是对真正的数据进行了抽象，它主要由以下几部分组成</p>
 <ol>
-<li><code>python/needle/autograd.py</code>，定义了框架，包括但不限于以下部分<ol>
-<li>class Op</li>
-<li>class TensorOp(Op)</li>
-<li>class Value</li>
-<li>class Tensor(Value)</li>
-<li>compute_gradient_of_variables</li>
+<li>handle，其实代表的就是数据，而这个数据是以一个一维数组的形式存在</li>
+<li>shape，虽然数据本质上是一维存在，但是我们在使用时，肯定是要用到多维数组的，这个shape就指定了这个多维数组</li>
+<li>stride，stride可以指定每一维包含多少数据，可以方便地改变我们对数据的shape的解释</li>
+<li>offest，表示当前NDArray的数据在handle中的起始位置</li>
+<li>device，表示是在哪种设备上</li>
 </ol>
-</li>
-<li><code>python/needle/ops/ops_mathematic.py</code>，包含多种操作的实现</li>
-</ol>
-<p>推荐先熟悉以下类，其他的没那么重要</p>
+<h1 id="Part-1-Python-array-operations"><a href="#Part-1-Python-array-operations" class="headerlink" title="Part 1: Python array operations"></a>Part 1: Python array operations</h1><h2 id="reshape"><a href="#reshape" class="headerlink" title="reshape"></a>reshape</h2><p>只需要修改shape和stride，其中stride可以通过<code>compact_strides</code>得到</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">if</span> self.size != <span class="hljs-built_in">prod</span>(new_shape):<br>    raise <span class="hljs-built_in">ValueError</span>()<br><span class="hljs-keyword">if</span> self.<span class="hljs-built_in">is_compact</span>() is False:<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">ValueError</span>()<br><span class="hljs-keyword">return</span> NDArray.<span class="hljs-built_in">make</span>(<br>    new_shape,<br>    self.<span class="hljs-built_in">compact_strides</span>(new_shape),<br>    self.device,<br>    self._handle,<br>    self._offset<br>    )<br></code></pre></td></tr></table></figure>
+
+<h2 id="permute"><a href="#permute" class="headerlink" title="permute"></a>permute</h2><p><code>permute(self, new_axes)</code>，通过指定axes来打乱原先的维度，要做的也只是修改shape和stride</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c++">new_shape = <span class="hljs-built_in">tuple</span>(np.<span class="hljs-built_in">array</span>(self.shape)[<span class="hljs-built_in">list</span>(new_axes)])<br>new_stride = <span class="hljs-built_in">tuple</span>(np.<span class="hljs-built_in">array</span>(self.strides)[<span class="hljs-built_in">list</span>(new_axes)])<br><span class="hljs-keyword">return</span> NDArray.<span class="hljs-built_in">make</span>(<br>    new_shape,<br>    new_stride,<br>    self.device,<br>    self._handle,<br>    self._offset<br>    )<br></code></pre></td></tr></table></figure>
+
+<h2 id="broadcast-to"><a href="#broadcast-to" class="headerlink" title="broadcast_to"></a>broadcast_to</h2><p><code>broadcast_to(self, new_shape)</code>，将一些长度为1的维度广播成指定的长度，要改变shape和stride，其中stride就是将广播的维度的stride都设置为0即可</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">assert</span> (<span class="hljs-built_in">len</span>(new_shape) == <span class="hljs-built_in">len</span>(self.shape))<br>new_stride = np.<span class="hljs-built_in">array</span>(self.strides)<br><span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(self.shape)):<br>    <span class="hljs-keyword">if</span> self.shape[i] != new_shape[i]:<br>        <span class="hljs-keyword">if</span> self.shape[i] != <span class="hljs-number">1</span>:<br>            raise AssertionError<br>        <span class="hljs-keyword">else</span>:<br>            new_stride[i] = <span class="hljs-number">0</span><br><span class="hljs-keyword">return</span> NDArray.<span class="hljs-built_in">make</span>(<br>    <span class="hljs-built_in">tuple</span>(new_shape), <span class="hljs-built_in">tuple</span>(<br>        new_stride), self.device, self._handle, self._offset<br>    )<br></code></pre></td></tr></table></figure>
+
+<h2 id="getitem"><a href="#getitem" class="headerlink" title="getitem"></a>getitem</h2><p><code>__getitem__(self, idxs)</code>，这是对取值符号<code>[]</code>的重载，框架保证idxs是一个元组，并且里面的每个元素都是切片的形式，并且都是从前往后遍历的常规切片，格式为$[start,stop,step]$</p>
+<p>这里shape，stride，offset都要修改</p>
+<p>shape：计算出切片之后，每个维度还剩下的长度</p>
+<p>stride：在原来的stride基础上，乘上切片指定的step</p>
+<p>offset：计算切片的起始位置（每个维度都要）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c++"># BEGIN YOUR SOLUTION<br># 计算新的shape<br>new_shape = []<br><span class="hljs-keyword">for</span> sl in idxs:<br>    start, end, step = sl.start, sl.stop, sl.step<br>    new_shape.<span class="hljs-built_in">append</span>(math.<span class="hljs-built_in">ceil</span>((end - start) / step))<br># 计算新的offset<br>offset = []<br><span class="hljs-keyword">for</span> st, sl in <span class="hljs-built_in">zip</span>(self.strides, idxs):<br>    offset.<span class="hljs-built_in">append</span>(st * sl.start)<br>new_offset = <span class="hljs-built_in">sum</span>(np.<span class="hljs-built_in">array</span>(offset))<br># 计算新的stride<br>new_strides = []<br><span class="hljs-keyword">for</span> st, sl in <span class="hljs-built_in">zip</span>(self.strides, idxs):<br>    new_strides.<span class="hljs-built_in">append</span>(st * sl.step)<br><span class="hljs-keyword">return</span> NDArray.<span class="hljs-built_in">make</span>(<br>    <span class="hljs-built_in">tuple</span>(new_shape),<br>    <span class="hljs-built_in">tuple</span>(new_strides),<br>    self.device,<br>    self._handle,<br>    new_offset<br>    )<br># END YOUR SOLUTION<br></code></pre></td></tr></table></figure>
+
+<h1 id="Part-2-CPU-Backend-Compact-and-setitem"><a href="#Part-2-CPU-Backend-Compact-and-setitem" class="headerlink" title="Part 2: CPU Backend - Compact and setitem"></a>Part 2: CPU Backend - Compact and setitem</h1><p>这个部分要完成三个函数，但是基本一样</p>
+<h2 id="compact"><a href="#compact" class="headerlink" title="compact"></a>compact</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Compact</span><span class="hljs-params">(<span class="hljs-type">const</span> AlignedArray &amp;a, AlignedArray *out, std::vector&lt;<span class="hljs-type">int32_t</span>&gt; shape,std::vector&lt;<span class="hljs-type">int32_t</span>&gt; strides, <span class="hljs-type">size_t</span> offset)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>a是一个不紧凑的数组，要将其按照shape，strides和offset的格式紧凑到out中，本来就是一个多重循环就搞定了，但是因为这里shape的维度不定，不知道要写几重循环，所以需要模拟循环多重的过程</p>
+<h2 id="EwiseSetitem"><a href="#EwiseSetitem" class="headerlink" title="EwiseSetitem"></a>EwiseSetitem</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">EwiseSetitem</span><span class="hljs-params">(<span class="hljs-type">const</span> AlignedArray&amp; a, AlignedArray* out, std::vector&lt;<span class="hljs-type">uint32_t</span>&gt; shape,</span></span><br><span class="hljs-params"><span class="hljs-function">                  std::vector&lt;<span class="hljs-type">uint32_t</span>&gt; strides, <span class="hljs-type">size_t</span> offset)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>这里面a是一个紧凑数组，out不是紧凑的，后面的三个参数是用来形容out的</p>
+<p>这里是将一个紧凑的变成一个不紧凑的，可以用来实现切片复制，比如<code>a[,3:4,]=b</code></p>
+<h2 id="ScalarSetitem"><a href="#ScalarSetitem" class="headerlink" title="ScalarSetitem"></a>ScalarSetitem</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ScalarSetitem</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">size_t</span> size, <span class="hljs-type">scalar_t</span> val, AlignedArray *out, std::vector&lt;<span class="hljs-type">int32_t</span>&gt; shape,</span></span><br><span class="hljs-params"><span class="hljs-function">                   std::vector&lt;<span class="hljs-type">int32_t</span>&gt; strides, <span class="hljs-type">size_t</span> offset)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>将值设置为固定值</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>要注意的是，这里面a和out的需要操作的数量一定是相同的</p>
+<p>即不紧凑的那个的shape和stride相乘之和，一定等于紧凑的那个的cnt</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">RealOp</span><span class="hljs-params">(<span class="hljs-type">const</span> AlignedArray *a, AlignedArray *out, std::vector&lt;<span class="hljs-type">int32_t</span>&gt; shape,</span></span><br><span class="hljs-params"><span class="hljs-function">            std::vector&lt;<span class="hljs-type">int32_t</span>&gt; strides, <span class="hljs-type">size_t</span> offset, OpMode mode, <span class="hljs-type">int</span> val)</span> </span>&#123;<br>    <span class="hljs-type">int</span> for_len = shape.<span class="hljs-built_in">size</span>();             <span class="hljs-comment">// for循环的层数</span><br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">uint32_t</span>&gt; <span class="hljs-title">loop</span><span class="hljs-params">(for_len, <span class="hljs-number">0</span>)</span></span>; <span class="hljs-comment">// 记录当前各层的循环次数，0代表最外层，for_len-1代表最里面</span><br>    <span class="hljs-type">int</span> cnt = <span class="hljs-number">0</span>;                            <span class="hljs-comment">// out的指针</span><br>    <span class="hljs-comment">// 开始循环</span><br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>        <span class="hljs-comment">// 计算a的索引，并给out赋值</span><br>        <span class="hljs-type">int</span> idx = offset;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; for_len; i++) &#123;<br>            idx += loop[i] * strides[i];<br>        &#125;<br>        <span class="hljs-keyword">switch</span> (mode) &#123;<br>        <span class="hljs-keyword">case</span> in_mode:<br>            out-&gt;ptr[cnt] = a-&gt;ptr[idx];<br>            cnt += <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> out_mode:<br>            out-&gt;ptr[idx] = a-&gt;ptr[cnt];<br>            cnt += <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> set_mode:<br>            out-&gt;ptr[idx] = val;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-comment">// 更新loop，先更新最内层，然后根据有没有超出shape判断是否要更新上一层的loop</span><br>        <span class="hljs-type">int</span> modify_idx = for_len - <span class="hljs-number">1</span>;<br>        loop[modify_idx] += <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">while</span> (loop[modify_idx] == shape[modify_idx]) &#123;<br>            <span class="hljs-keyword">if</span> (modify_idx == <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            loop[modify_idx] = <span class="hljs-number">0</span>;<br>            modify_idx -= <span class="hljs-number">1</span>;<br>            loop[modify_idx] += <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Part-3-CPU-Backend-Elementwise-and-scalar-operations"><a href="#Part-3-CPU-Backend-Elementwise-and-scalar-operations" class="headerlink" title="Part 3: CPU Backend - Elementwise and scalar operations"></a>Part 3: CPU Backend - Elementwise and scalar operations</h1><p>实现各种操作，通过std提供的数学函数来实现都比较简单</p>
+<p>这里可以看一下Python文件和C文件是怎么联动的</p>
+<p>通过<code>m.def(&quot;ewise_mul&quot;, EwiseMul);</code>就可以将python中的<code>ewise_mul</code>对应到c语言的<code>EwiseMul</code></p>
+<p>而在Python文件中，先对操作符进行重载，然后将相关的ewise或者scalar函数当做参数传入<code>ewise_or_scalar</code>函数。这个函数进一步根据other的类型选择执行哪个</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++">self.<span class="hljs-built_in">ewise_or_scalar</span>(<br>            other, self.device.ewise_mul, self.device.scalar_mul<br>            )<br></code></pre></td></tr></table></figure>
+
+<p>如果other是ndarray，就会执行</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">ewise_func</span>(self.<span class="hljs-built_in">compact</span>()._handle,<br>           other.<span class="hljs-built_in">compact</span>()._handle, out._handle)<br></code></pre></td></tr></table></figure>
+
+<p>而这个函数也对应到了这样的c语言参数列表</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">EwiseDiv</span><span class="hljs-params">(<span class="hljs-type">const</span> AlignedArray &amp;a, <span class="hljs-type">const</span> AlignedArray &amp;b, AlignedArray *out)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>现在还不太清楚的是为什么传入的都是handle，怎么out的就是指针，其他的就是引用</p>
+<h1 id="Part-4-CPU-Backend-Reductions"><a href="#Part-4-CPU-Backend-Reductions" class="headerlink" title="Part 4: CPU Backend - Reductions"></a>Part 4: CPU Backend - Reductions</h1><p>这里要完成对特定维度的sum或者max函数</p>
+<p>在numpy中，可以通过直接axes实现，但是在c数组中，就有点麻烦了</p>
+<p>lab先在Python文件中对这个操作进行了预处理</p>
 <ol>
-<li><p>Value</p>
-</li>
-<li><p>Op</p>
-<p> 关键在于两个函数</p>
-<p> compute()会计算输出</p>
-<p> gradient()会根据输出的梯度，求出输入的梯度（反向传播）</p>
-</li>
-<li><p>Tensor</p>
-</li>
-<li><p>TensorOp</p>
-</li>
-</ol>
-<h1 id="实现forward操作"><a href="#实现forward操作" class="headerlink" title="实现forward操作"></a>实现forward操作</h1><p>很多操作就是一行numpy函数解决，但是最后一个需要自己再处理一下逻辑</p>
-<p>在numpy中，转置维度必须将所有维度包括了，加入维度是5，那么输入的axes的长度一定是五，然后把要交换的两个维度交换位置，比如这里就是将2和4对应的维度交换，[0,1,4,3,2]</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">compute</span><span class="hljs-params">(self, a)</span>:</span><br><span class="hljs-function">    d =</span> a.ndim<br>    axis = [i <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(d)]<br>    x, y = (d - <span class="hljs-number">1</span>, d - <span class="hljs-number">2</span>) <span class="hljs-keyword">if</span> self.axes is None 						       <span class="hljs-built_in">else</span>(self.axes[<span class="hljs-number">0</span>], self.axes[<span class="hljs-number">1</span>])<br>    axis[x], axis[y] = axis[y], axis[x]<br>    <span class="hljs-keyword">return</span> array_api.<span class="hljs-built_in">transpose</span>(a, axes=axis)<br></code></pre></td></tr></table></figure>
-
-<h1 id="实现backward计算"><a href="#实现backward计算" class="headerlink" title="实现backward计算"></a>实现backward计算</h1><h2 id="power-scalar"><a href="#power-scalar" class="headerlink" title="power_scalar"></a>power_scalar</h2><p>$$<br>y&#x3D;x^a\<br>\frac{dy}{dx}&#x3D;ax^{a-1}<br>$$</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return out_grad * self.scalar * mul_scalar(node.inputs[<span class="hljs-number">0</span>], self.scalar - <span class="hljs-number">1</span>)</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="divide"><a href="#divide" class="headerlink" title="divide"></a>divide</h2><p>$$<br>y&#x3D;\frac{a}{b}\<br>\frac{dy}{da}&#x3D;\frac{1}{b}\<br>\frac{dy}{db}&#x3D;-\frac{a}{b^2}<br>$$</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    a_d =</span> <span class="hljs-built_in">divide</span>(out_grad, node.inputs[<span class="hljs-number">1</span>])<br>    b_d = <span class="hljs-built_in">negate</span>(<span class="hljs-built_in">multiply</span>(out_grad, <span class="hljs-built_in">divide</span>(<br>        node.inputs[<span class="hljs-number">0</span>], <span class="hljs-built_in">multiply</span>(node.inputs[<span class="hljs-number">1</span>], node.inputs[<span class="hljs-number">1</span>]))))<br>    <span class="hljs-keyword">return</span> a_d, b_d<br>    # END YOUR SOLUTION<br></code></pre></td></tr></table></figure>
-
-<h2 id="divide-scalar"><a href="#divide-scalar" class="headerlink" title="divide_scalar"></a>divide_scalar</h2><p>标量操作很简单</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return out_grad / self.scalar</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="matmul"><a href="#matmul" class="headerlink" title="matmul"></a>matmul</h2><p>这个操作就有点恶心了，特别是两个相乘的矩阵存在高纬（超过两维的情况）</p>
-<p>高维矩阵相乘，本质上是多个二维矩阵相乘，它们除了最后两个维度要能够相乘外，前面的维度必须完全相同，比如一个四维矩阵A[a,b,c,d]和一个三维矩阵[e,f,g]可以相乘的条件就是[c,d]和[f,g]要能够相乘，并且b要等于e</p>
-<p>而求导，也就是将前面维度全部求和，比如C&#x3D;AB，其中A的维度是[a,b,c,d]，B的维度是[d,e]，C的维度就是[a,b,c,e]</p>
-<ol>
-<li>现在损失对A求导的结果的形状肯定也是[a,b,c,d]，这个维度很容易通过C的梯度的形状[a,b,c,e]和B的形状[d,e]凑出来</li>
-<li>而损失函数对B求导的形状肯定是[d,e]，但是这个不能直接由C的梯度[a,b,c,e]和A的梯度[a,b,c,d]凑出来，因为多了前面两维[a,b]，将这两维给除去的方法，就是将对应位置给加起来，通过numpy.sum(0,1)就可以达到这个效果。（为什么相加之后结果就是B的导数，就和矩阵求导相关了，我也不会证明）</li>
-</ol>
-<p>最后，对一个高维矩阵，比如[a,b,c,d]进行转置，好像只会将它转为[a,b,d,c]</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    lhs, rhs =</span> node.inputs<br>    lgrad, rgrad = <span class="hljs-built_in">matmul</span>(out_grad, rhs.<span class="hljs-built_in">transpose</span>()), <span class="hljs-built_in">matmul</span>(<br>        lhs.<span class="hljs-built_in">transpose</span>(), out_grad)<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(lhs.shape) &lt; <span class="hljs-built_in">len</span>(lgrad.shape):<br>        lgrad = lgrad.<span class="hljs-built_in">sum</span>(<br>            <span class="hljs-built_in">tuple</span>([i <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(lgrad.shape) - <span class="hljs-built_in">len</span>(lhs.shape))]))<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(rhs.shape) &lt; <span class="hljs-built_in">len</span>(rgrad.shape):<br>        rgrad = rgrad.<span class="hljs-built_in">sum</span>(<br>            <span class="hljs-built_in">tuple</span>([i <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(rgrad.shape) - <span class="hljs-built_in">len</span>(rhs.shape))]))<br>    <span class="hljs-keyword">return</span> lgrad, rgrad<br></code></pre></td></tr></table></figure>
-
-<h2 id="reshape"><a href="#reshape" class="headerlink" title="reshape"></a>reshape</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return reshape(out_grad, node.inputs[<span class="hljs-number">0</span>].shape)</span><br><span class="hljs-function">    # END YOUR SOLUTION</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="negate"><a href="#negate" class="headerlink" title="negate"></a>negate</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return negate(out_grad)</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="transpose"><a href="#transpose" class="headerlink" title="transpose"></a>transpose</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    return transpose(out_grad, self.t)</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="broadcast"><a href="#broadcast" class="headerlink" title="broadcast"></a>broadcast</h2><ol>
-<li>将变化的维度给找出来，比如原始数据是[3,5,1,4]，被广播成了[3,5,4,4]，那么要做的就是将第3维给找出来，也就是1-&gt;4的这一维，然后将这一维的梯度通过sum相加</li>
-<li>最后还要reshape成原来的样子</li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    ori_shape =</span> node.inputs[<span class="hljs-number">0</span>].shape<br>    shrink_dims = [i <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(self.shape))]<br>    <span class="hljs-keyword">for</span> i, (ori, cur) in <span class="hljs-built_in">enumerate</span>(<span class="hljs-built_in">zip</span>(<span class="hljs-built_in">reversed</span>(ori_shape), <span class="hljs-built_in">reversed</span>(self.shape))):<br>        <span class="hljs-keyword">if</span> ori == cur:<br>            shrink_dims[<span class="hljs-built_in">len</span>(self.shape) - i - <span class="hljs-number">1</span>] = <span class="hljs-number">-1</span><br>    shrink_dims = <span class="hljs-built_in">tuple</span>(<span class="hljs-built_in">filter</span>(lambda x: x &gt;= <span class="hljs-number">0</span>, shrink_dims))<br>    <span class="hljs-keyword">return</span> out_grad.<span class="hljs-built_in">sum</span>(shrink_dims).<span class="hljs-built_in">reshape</span>(ori_shape)<br>    # END YOUR SOLUTION<br></code></pre></td></tr></table></figure>
-
-<h2 id="summation"><a href="#summation" class="headerlink" title="summation"></a>summation</h2><p>summation是对维度进行了压缩，那么在反向传播时，肯定要将其进行广播</p>
-<p>所以</p>
-<ol>
-<li>先找出哪些维度被压缩了</li>
-<li>reshape成被压缩的形状（之前通过sum操作，可能直接将维度给干没了，所以要reshape恢复维度，即使那个维度的长度是1）</li>
-<li>广播成输入的形状（为啥可以直接广播就是正确的梯度，和矩阵求导相关）</li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    new_shape =</span> <span class="hljs-built_in">list</span>(node.inputs[<span class="hljs-number">0</span>].shape)<br>    axes = <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(new_shape)) <span class="hljs-keyword">if</span> self.axes is None <span class="hljs-keyword">else</span> self.axes<br>    <span class="hljs-keyword">for</span> axis in axes:<br>        new_shape[axis] = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> out_grad.<span class="hljs-built_in">reshape</span>(new_shape).<span class="hljs-built_in">broadcast_to</span>(node.inputs[<span class="hljs-number">0</span>].shape)<br></code></pre></td></tr></table></figure>
-
-<h1 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h1><p>这个部分感觉题意有点难理解，本质上很简单</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">find_topo_sort</span><span class="hljs-params">(node_list: List[Value])</span> -&gt; List[Value]:</span><br></code></pre></td></tr></table></figure>
-
-<p>这个函数给出了一个node_list，这里面可能有多个node，输出以这个node为终点的拓扑排序（正拓扑排序）</p>
-<blockquote>
-<p>以目前我的理解，不太明白为什么是node_list，一般不就是用最后lost的函数的结点为终点找拓扑排序吗。</p>
-<p>我看了一下测试的代码，也都是只用了一个节点，先留个坑</p>
-</blockquote>
-<p>下面这个函数给了一个dfs的模板</p>
-<ol>
-<li>第一个参数node代表当前遍历到了哪个结点</li>
-<li>第二个参数visited代表已经有哪些结点被访问过了</li>
-<li>第三个参数topo_order代表目前已经找到的拓扑排序，我们最后也就是要返回这个作为拓扑排序的答案</li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">topo_sort_dfs</span><span class="hljs-params">(node, visited, topo_order)</span>:</span><br></code></pre></td></tr></table></figure>
-
-<p>实现代码很简单，就是题意对我来说有一点晦涩，感觉和不太熟悉怎么用终点推出拓扑排序有关，菜狗</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">find_topo_sort</span><span class="hljs-params">(node_list: List[Value])</span> -&gt; List[Value]:</span><br><span class="hljs-function">    ans =</span> []<br>    vis = <span class="hljs-built_in">set</span>()<br>    <span class="hljs-keyword">for</span> node in node_list:<br>        <span class="hljs-built_in">topo_sort_dfs</span>(node, vis, ans)<br>    <span class="hljs-keyword">return</span> ans<br>def <span class="hljs-built_in">topo_sort_dfs</span>(node, visited, topo_order):<br>    <span class="hljs-keyword">if</span> node in visited:<br>        <span class="hljs-keyword">return</span><br>    <span class="hljs-keyword">for</span> ne in node.inputs:<br>        <span class="hljs-built_in">topo_sort_dfs</span>(ne, visited, topo_order)<br>    visited.<span class="hljs-built_in">add</span>(node)<br>    topo_order.<span class="hljs-built_in">append</span>(node)<br></code></pre></td></tr></table></figure>
-
-<h1 id="反向模式微分"><a href="#反向模式微分" class="headerlink" title="反向模式微分"></a>反向模式微分</h1><p>函数签名</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">compute_gradient_of_variables</span><span class="hljs-params">(output_tensor, out_grad)</span></span><br></code></pre></td></tr></table></figure>
-
-<ol>
-<li>第一个参数是最后输出的那个tensor</li>
-<li>第二个参数是这个tensor的梯度</li>
-</ol>
-<p>函数内已有的变量</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">node_to_output_grads_list: Dict[Tensor, List[Tensor]] = &#123;&#125;<br></code></pre></td></tr></table></figure>
-
-<p>这个字典表示，当前tensor对应的，所有输出tensor对它的偏导数</p>
-<p>使用起来也很简单，只要将对应的偏导数全部相加，就是当前tensor的梯度</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">reverse_topo_order = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">reversed</span>(<span class="hljs-built_in">find_topo_sort</span>([output_tensor])))<br></code></pre></td></tr></table></figure>
-
-<p>这就是反向的拓扑排序</p>
-<p>实现思路基本就是下面这个图</p>
-<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024161041846.png" srcset="/img/loading.gif" lazyload alt="image-20231024161041846"></p>
-<p>但是需要加入一些对当前框架的理解</p>
-<ol>
-<li>首先，这个函数的作用就是计算出每一个tensor对应的梯度，而通过上图也可以看到，我们在反向传播中是通过新建了一个tensor来保存梯度的。按照这个框架的意思，好像是将这个新建的tensor作为原来tensor的一个变量存入原来的tensor，这里可以用self.grad来存。感觉这个参数可以随便命名，可能后面的调用都是自己写</li>
-<li>这里要用到之前写的各种op中的gradient函数了，可以通过<code>gradient_as_tuple</code>来调用。这个函数也正是生成了对输入的所有tensor对应的偏导数tensor，核心操作了属于是</li>
-</ol>
-<p>因此，实现思路</p>
-<ol>
-<li>按照反向拓扑排序的顺序来遍历所有tensor</li>
-<li>根据<code>node_to_output_grads_list</code>对应的值，计算这个tensor的梯度，这里可以用框架提供的<code>sum_node_list</code>来计算梯度之和。然后将计算好的梯度存入当前node</li>
-<li>如果当前tensor没有input结点，也就是op为None，直接continue</li>
-<li>如果当前tensor有input结点<ol>
-<li>先通过<code>gradient_as_tuple</code>取出这个tensor对所有input的偏导数tensor</li>
-<li>然后将input和偏导数tensor一一对应的访问，加入字典<code>node_to_output_grads_list</code>中</li>
+<li>首先，只允许指定一个轴</li>
+<li>通过改变shape和stride，将我们需要操作的一个reduce块变成连续的<ol>
+<li>首先，将要操作的那个维度放到shape的最后，可以通过<code>permute</code>来完成维度的移动。</li>
+<li>构造出reduce操作之后out的形状，就是将操作的那个轴的长度变成1</li>
 </ol>
 </li>
 </ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">compute_gradient_of_variables</span><span class="hljs-params">(output_tensor, out_grad)</span>:</span><br><span class="hljs-function">    node_to_output_grads_list: Dict[Tensor, List[Tensor]] =</span> &#123;&#125;<br>    node_to_output_grads_list[output_tensor] = [out_grad]<br>    reverse_topo_order = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">reversed</span>(<span class="hljs-built_in">find_topo_sort</span>([output_tensor])))<br>    <span class="hljs-keyword">for</span> node in reverse_topo_order:<br>        grads = <span class="hljs-built_in">sum_node_list</span>(node_to_output_grads_list[node])<br>        node.grad = grads<br>        <span class="hljs-keyword">if</span> node.op is None:<br>            <span class="hljs-keyword">continue</span><br>        node_to_input_grad = node.op.<span class="hljs-built_in">gradient_as_tuple</span>(node.grad, node)<br>        <span class="hljs-keyword">for</span> input_node, input_grad in <span class="hljs-built_in">zip</span>(node.inputs, node_to_input_grad):<br>            <span class="hljs-keyword">if</span> input_node <span class="hljs-keyword">not</span> in node_to_output_grads_list:<br>                node_to_output_grads_list[input_node] = []<br> node_to_output_grads_list[input_node].<span class="hljs-built_in">append</span>(input_grad)<br></code></pre></td></tr></table></figure>
-
-<h1 id="softmax-loss"><a href="#softmax-loss" class="headerlink" title="softmax loss"></a>softmax loss</h1><p>先实现两个op，要注意，在反向传播的过程中，要全程调用tensor的op，不能再用numpy的操作了</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">class</span> <span class="hljs-title">Log</span><span class="hljs-params">(TensorOp)</span>:</span><br><span class="hljs-function">    def compute(self, a):</span><br><span class="hljs-function">        return array_api.log(a)</span><br><span class="hljs-function">    def gradient(self, out_grad, node):</span><br><span class="hljs-function">        return divide(out_grad, node.inputs[<span class="hljs-number">0</span>])</span><br><span class="hljs-function">class Exp(TensorOp):</span><br><span class="hljs-function">    def compute(self, a):</span><br><span class="hljs-function">        return array_api.exp(a)</span><br><span class="hljs-function">    def gradient(self, out_grad, node):</span><br><span class="hljs-function">        return multiply(out_grad, exp(node.inputs[<span class="hljs-number">0</span>]))</span><br></code></pre></td></tr></table></figure>
-
-<p>实现softmax，基本就是翻译hw0里的softmax_loss函数，这里用了比较巧的计算方法， 那就是将减号前面和减号后面的分开计算，然后统一相减后求平均值</p>
-<p><img src="http://woaixiaoxiao-image.oss-cn-beijing.aliyuncs.com/img/image-20231024171353873.png" srcset="/img/loading.gif" lazyload alt="image-20231024171353873"></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">softmax_loss</span><span class="hljs-params">(Z, y_one_hot)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    e_z =</span> ndl.<span class="hljs-built_in">exp</span>(Z)<br>    e_s = ndl.<span class="hljs-built_in">summation</span>(e_z, (<span class="hljs-number">1</span>,))<br>    e_l = ndl.<span class="hljs-built_in">log</span>(e_s)<br>    e_s = ndl.<span class="hljs-built_in">summation</span>(e_l)<br>    <span class="hljs-comment">// 通过矩阵相乘，将one_hot向量变成对应的值</span><br>    y_s = ndl.<span class="hljs-built_in">summation</span>(y_one_hot * Z)<br>    <span class="hljs-built_in">return</span> (e_s - y_s) / Z.shape[<span class="hljs-number">0</span>]<br>    # END YOUR SOLUTION<br></code></pre></td></tr></table></figure>
-
-<h1 id="两层神经网络的SGD"><a href="#两层神经网络的SGD" class="headerlink" title="两层神经网络的SGD"></a>两层神经网络的SGD</h1><ol>
-<li>第一步，增加relu函数</li>
-</ol>
-<p>前向计算比较简单</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">compute</span><span class="hljs-params">(self, a)</span>:</span><br><span class="hljs-function">    return array_api.maximum(<span class="hljs-number">0</span>, a)</span><br></code></pre></td></tr></table></figure>
-
-<p>反向传播的时候，原来小于0的部分梯度为0，不用更新，所以只需要更新原来大于0的部分，这部分函数是$relu(x)&#x3D;x$，所以导数还是1</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">gradient</span><span class="hljs-params">(self, out_grad, node)</span>:</span><br><span class="hljs-function">    # BEGIN YOUR SOLUTION</span><br><span class="hljs-function">    data =</span> node.<span class="hljs-built_in">realize_cached_data</span>().<span class="hljs-built_in">copy</span>()<br>    data[data &gt; <span class="hljs-number">0</span>] = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">multiply</span>(out_grad, <span class="hljs-built_in">Tensor</span>(data))<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>第二步，完成sgd</li>
-</ol>
-<p>基本的流程和hw0基本一致，但是有几个注意点</p>
+<p>因此，在c文件中，只需要将a数组分段求和或者求最大值，然后依次存入out数组就行了</p>
+<h1 id="Part-5-CPU-Backend-Matrix-multiplication"><a href="#Part-5-CPU-Backend-Matrix-multiplication" class="headerlink" title="Part 5: CPU Backend - Matrix multiplication"></a>Part 5: CPU Backend - Matrix multiplication</h1><p>第一部分的<code>Matmul</code>就是常规的二维矩阵乘法，记得要在累加之前先清零</p>
+<p>第二部分的<code>MatmulTiled</code>是以<code>Tile</code>为变成的正方形进行操作</p>
 <ol>
-<li>这里的X和y是numpy类型，使用时要先转为Tensor</li>
-<li>反向传播是从最后一个结点开始的，这里就是loss</li>
-<li>更改参数直接操作W1和W2里面cached_data就可以完成</li>
+<li><p>首先需要完成<code>AlignedDot</code>，这个函数是对两个正方形矩形做乘法</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; TILE; i++) <br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> j = <span class="hljs-number">0</span>; j &lt; TILE; j++) <br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> k = <span class="hljs-number">0</span>; k &lt; TILE; k++) <br>            out[i * TILE + j] += a[i * TILE + k] * b[k * TILE + j];<br></code></pre></td></tr></table></figure>
+
+<p> 需要注意的是，这里面的out后续还会加上其他的正方形相乘之后，因此不能在操作前清零</p>
+</li>
+<li><p>在上面这个函数的帮助下，求出两个四维矩阵相乘的结果</p>
+<p> 只需要遍历out每一个<code>Tile×Tile</code>的正方形，它是由很多个a和b的正方形相乘得到。在<code>AlignedDot</code>的抽象下可以将正方形看成一个普通的整数</p>
+<p> <code>MatmulTiled</code>需要在开始操作之前对out初始化为0</p>
+</li>
 </ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">def <span class="hljs-title">nn_epoch</span><span class="hljs-params">(X, y, W1, W2, lr=<span class="hljs-number">0.1</span>, batch=<span class="hljs-number">100</span>)</span>:    </span><br><span class="hljs-function">	batch_num =</span> X.shape[<span class="hljs-number">0</span>] <span class="hljs-comment">// batch</span><br>    Y = <span class="hljs-built_in">gethot</span>(y, W2.shape[<span class="hljs-number">1</span>])<br>    <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(batch_num):<br>        x_d = ndl.<span class="hljs-built_in">Tensor</span>(X[i * batch:(i + <span class="hljs-number">1</span>) * batch])<br>        y_d = ndl.<span class="hljs-built_in">Tensor</span>(Y[i * batch:(i + <span class="hljs-number">1</span>) * batch])<br>        x_w1 = ndl.<span class="hljs-built_in">matmul</span>(x_d, W1)<br>        th_x_w1 = ndl.<span class="hljs-built_in">relu</span>(x_w1)<br>        o = ndl.<span class="hljs-built_in">matmul</span>(th_x_w1, W2)<br>        loss = <span class="hljs-built_in">softmax_loss</span>(o, y_d)<br>        loss.<span class="hljs-built_in">backward</span>()<br>        W1 = ndl.<span class="hljs-built_in">Tensor</span>(W1.<span class="hljs-built_in">realize_cached_data</span>() - lr *<br>                        W1.grad.<span class="hljs-built_in">realize_cached_data</span>())<br>        W2 = ndl.<span class="hljs-built_in">Tensor</span>(W2.<span class="hljs-built_in">realize_cached_data</span>() - lr *<br>                        W2.grad.<span class="hljs-built_in">realize_cached_data</span>())<br>    <span class="hljs-keyword">return</span> W1, W2<br></code></pre></td></tr></table></figure>
+<p>之所以要用Tile这种乘法，好像是为了利用cpu的向量化的操作，这一块目前还没啥了解</p>
+<ol>
+<li><code>__restrict__</code>表示这一块区域只有当前指针可以访问到，因此不会和别人有重复的区域。这个应该是可以增加cpu的并行性能</li>
+<li><code>__builtin_assume_aligned</code>表示这个指针在内存中已经对齐了。这个应该是增加内存访问的性能</li>
+</ol>
+<h1 id="Part-6-CUDA-Backend-Compact-and-setitem"><a href="#Part-6-CUDA-Backend-Compact-and-setitem" class="headerlink" title="Part 6: CUDA Backend - Compact and setitem"></a>Part 6: CUDA Backend - Compact and setitem</h1><p>要完成的效果和cpu的基本一样，但是因为cuda的特点，我们不需要手动模拟n重for循环，直接用线程块的id来表示当前处于for循环的哪个位置</p>
+<p>因此，通过gid和shape，就可以得出来loop数组，然后再在便宜的基础上加上loop数组和stride数组的点积，就可以得到非compact数组的坐标。这里要注意，对于紧凑的数组，stride可以通过shape计算出来，但是对于非紧凑的数组，stride和shape没有必然的关系，因此在这里计算loop数组的时候，需要手动倒序遍历shape数组</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">__device__ <span class="hljs-type">size_t</span> <span class="hljs-title">GetIndex</span><span class="hljs-params">(<span class="hljs-type">size_t</span> cnt, CudaVec shape, CudaVec strides, <span class="hljs-type">size_t</span> offset)</span> </span>&#123;<br>    <span class="hljs-type">int</span> pre_len = <span class="hljs-number">1</span>, cur_len;<br>    <span class="hljs-type">size_t</span> loop[MAX_VEC_SIZE];<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = shape.size - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) &#123;<br>        cur_len = pre_len * shape.data[i];<br>        loop[i] = (cnt % cur_len) / pre_len;<br>        pre_len = cur_len;<br>    &#125;<br>    <span class="hljs-type">size_t</span> idx = offset;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; strides.size; i++) &#123;<br>        idx += loop[i] * strides.data[i];<br>    &#125;<br>    <span class="hljs-keyword">return</span> idx;<br>&#125;<br><br><span class="hljs-function">__global__ <span class="hljs-type">void</span> <span class="hljs-title">CompactKernel</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">scalar_t</span> *a, <span class="hljs-type">scalar_t</span> *out, <span class="hljs-type">size_t</span> size, CudaVec shape,</span></span><br><span class="hljs-params"><span class="hljs-function">                              CudaVec strides, <span class="hljs-type">size_t</span> offset, Modes mode, <span class="hljs-type">int</span> val = <span class="hljs-number">-1</span>)</span> </span>&#123;<br>    <span class="hljs-type">size_t</span> gid = blockIdx.x * blockDim.x + threadIdx.x;<br>    <span class="hljs-keyword">if</span> (gid &lt; size) &#123;<br>        <span class="hljs-type">int</span> idx = <span class="hljs-built_in">GetIndex</span>(gid, shape, strides, offset);<br>        <span class="hljs-keyword">switch</span> (mode) &#123;<br>        <span class="hljs-keyword">case</span> mode_in:<br>            out[gid] = a[idx];<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> mode_out:<br>            out[idx] = a[gid];<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> mode_set:<br>            out[idx] = val;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<p>这两个函数就是最重要的，要实现的三个函数调用这个函数即可。要注意传入的size，这个size应该是紧凑的数组的长度，因此在Compact函数中要传入out.size，而在EwiseSetitem中，应该传入a.size。而传给CudaDims的size同理，也是这样的。</p>
+<h1 id="Part-7-CUDA-Backend-Elementwise-and-scalar-operations"><a href="#Part-7-CUDA-Backend-Elementwise-and-scalar-operations" class="headerlink" title="Part 7: CUDA Backend - Elementwise and scalar operations"></a>Part 7: CUDA Backend - Elementwise and scalar <strong>operations</strong></h1><p>复制粘贴， 替换符号</p>
+<p>感觉正确的做法应该是重载操作符，但是我不会</p>
+<h1 id="Part-8-CUDA-Backend-Reductions"><a href="#Part-8-CUDA-Backend-Reductions" class="headerlink" title="Part 8: CUDA Backend - Reductions"></a>Part 8: CUDA Backend - Reductions</h1><p>意思和cpu的一样，很简单了</p>
+<h1 id="Part-9-CUDA-Backend-Matrix-multiplication"><a href="#Part-9-CUDA-Backend-Matrix-multiplication" class="headerlink" title="Part 9: CUDA Backend - Matrix multiplication"></a>Part 9: CUDA Backend - Matrix multiplication</h1><p>这里需要实现cuda上的矩阵乘法，不优化的还是挺好写的</p>
+<p>首先要自己构造grid和block，为了防止M和P过大，这里选择让grid的长和宽为<code>BASE_THREAD_NUM</code>，block的长和宽为M和P除以这个值的上取整</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">dim3 <span class="hljs-title">grid</span><span class="hljs-params">(BASE_THREAD_NUM, BASE_THREAD_NUM)</span></span>;<br><span class="hljs-function">dim3 <span class="hljs-title">block</span><span class="hljs-params">(Ceil(M), Ceil(P))</span></span>;<br></code></pre></td></tr></table></figure>
 
-
-
-
-
-
-
-
-
-
+<p>在核函数中，用当前线程的x和y坐标代表out的坐标，然后用一个for循环就可以完成点积和累加了</p>
 
                 
               </div>
